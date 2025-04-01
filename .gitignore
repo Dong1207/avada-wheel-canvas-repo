@@ -10,8 +10,14 @@ coverage
 dist
 build
 
-# Misc
+# macOS
 .DS_Store
+**/.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Misc
 .env.local
 .env.development.local
 .env.test.local
