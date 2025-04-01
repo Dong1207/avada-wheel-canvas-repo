@@ -4,49 +4,94 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lucky Grid Example</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background: #f5f5f5;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .buttons {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      background: #617df2;
+      color: white;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #4a6be7;
+    }
+  </style>
 </head>
 <body>
-  <div id="my-lucky"></div>
-  <button onclick="myLucky.play()">play()</button>
-  <button onclick="myLucky.stop(0)">stop(0)</button>
-  <button onclick="myLucky.stop(1)">stop(1)</button>
-  <button onclick="myLucky.stop(2)">stop(2)</button>
-  <button onclick="myLucky.stop(-1)">stop(-1)</button>
-  <button onclick="myLucky.init()">init()</button>
+  <div class="container">
+    <div id="my-lucky"></div>
+    <div class="buttons">
+      <button onclick="myLucky.play()">Play</button>
+      <button onclick="myLucky.stop(0)">Stop (0)</button>
+      <button onclick="myLucky.stop(1)">Stop (1)</button>
+      <button onclick="myLucky.stop(2)">Stop (2)</button>
+      <button onclick="myLucky.stop(-1)">Stop (-1)</button>
+      <button onclick="myLucky.init()">Reset</button>
+    </div>
+  </div>
   <script type="module">
     import { LuckyGrid } from '../src/index.ts'
     
-    // Đặt biến myLucky vào global scope (window)
     window.myLucky = new LuckyGrid('#my-lucky', {
-      width: '200px',
-      height: '200px',
+      width: '300px',
+      height: '300px',
       rows: 4,
       cols: 4,
       blocks: [
-        { padding: '1rem 2px', background: 'red' }
+        { padding: '10px', background: '#617df2' }
       ],
       prizes: [
-        { x: 0, y: 0 },
-        { x: 1, y: 0 },
-        { x: 2, y: 0 },
-        { x: 3, y: 0 },
-        { x: 3, y: 1 },
-        { x: 3, y: 2 },
-        { x: 3, y: 3 },
-        { x: 2, y: 3 },
-        { x: 1, y: 3 },
-        { x: 0, y: 3 },
-        { x: 0, y: 2 },
-        { x: 0, y: 1 },
+        { x: 0, y: 0, background: '#e9e8fe', fonts: [{ text: 'Prize 1', top: '20%' }] },
+        { x: 1, y: 0, background: '#b8c5f2', fonts: [{ text: 'Prize 2', top: '20%' }] },
+        { x: 2, y: 0, background: '#e9e8fe', fonts: [{ text: 'Prize 3', top: '20%' }] },
+        { x: 3, y: 0, background: '#b8c5f2', fonts: [{ text: 'Prize 4', top: '20%' }] },
+        { x: 3, y: 1, background: '#e9e8fe', fonts: [{ text: 'Prize 5', top: '20%' }] },
+        { x: 3, y: 2, background: '#b8c5f2', fonts: [{ text: 'Prize 6', top: '20%' }] },
+        { x: 3, y: 3, background: '#e9e8fe', fonts: [{ text: 'Prize 7', top: '20%' }] },
+        { x: 2, y: 3, background: '#b8c5f2', fonts: [{ text: 'Prize 8', top: '20%' }] },
+        { x: 1, y: 3, background: '#e9e8fe', fonts: [{ text: 'Prize 9', top: '20%' }] },
+        { x: 0, y: 3, background: '#b8c5f2', fonts: [{ text: 'Prize 10', top: '20%' }] },
+        { x: 0, y: 2, background: '#e9e8fe', fonts: [{ text: 'Prize 11', top: '20%' }] },
+        { x: 0, y: 1, background: '#b8c5f2', fonts: [{ text: 'Prize 12', top: '20%' }] }
       ],
       buttons: [
         {
           x: 1, y: 1,
           row: 2, col: 2,
-        },
+          background: '#8a9bf3',
+          fonts: [{ text: 'START', top: '20%' }]
+        }
       ],
       defaultStyle: {
-        background: '#f4f5f5'
+        background: '#fff'
+      },
+      defaultConfig: {
+        gutter: 10
       }
     })
   </script>
