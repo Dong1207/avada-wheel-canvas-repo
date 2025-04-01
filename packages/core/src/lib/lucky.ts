@@ -73,7 +73,7 @@ export default class Lucky {
   }
 
   /**
-   * 初始化组件大小/单位
+   * Initialize component size/units
    */
   protected resize(): void {
     this.config.beforeResize?.()
@@ -88,7 +88,7 @@ export default class Lucky {
   }
 
   /**
-   * 初始化方法
+   * Initialize method
    */
   protected initLucky () {
     this.resize()
@@ -98,28 +98,28 @@ export default class Lucky {
   }
 
   /**
-   * 鼠标点击事件
-   * @param e 事件参数
+   * Mouse click event
+   * @param e Event parameters
    */
   protected handleClick (e: MouseEvent): void {}
 
   /**
-   * 根标签的字体大小
+   * Root tag font size
    */
   protected setHTMLFontSize (): void {
     if (!window) return
     this.htmlFontSize = +window.getComputedStyle(document.documentElement).fontSize.slice(0, -2)
   }
 
-  // 清空画布
+  // Clear canvas
   public clearCanvas (): void {
     const [width, height] = [this.boxWidth, this.boxHeight]
     this.ctx.clearRect(-width, -height, width * 2, height * 2)
   }
 
   /**
-   * 设备像素比
-   * window 环境下自动获取, 其余环境手动传入
+   * Device pixel ratio
+   * Automatically obtained in window environment, manually passed in other environments
    */
   protected setDpr (): void {
     const { config } = this
@@ -133,7 +133,7 @@ export default class Lucky {
   }
 
   /**
-   * 重置盒子和canvas的宽高
+   * Reset box and canvas width/height
    */
   private resetWidthAndHeight (): void {
     const { config, data } = this
@@ -155,7 +155,7 @@ export default class Lucky {
   }
 
   /**
-   * 根据 dpr 缩放 canvas 并处理位移
+   * Scale canvas according to dpr and handle displacement
    */
   protected zoomCanvas (): void {
     const { config, ctx } = this
@@ -172,7 +172,7 @@ export default class Lucky {
   }
 
   /**
-   * 从 window 对象上获取一些方法
+   * Get some methods from window object
    */
   private initWindowFunction (): void {
     const { config } = this
@@ -207,9 +207,9 @@ export default class Lucky {
   }
 
   /**
-   * 异步加载图片并返回图片的几何信息
-   * @param src 图片路径
-   * @param info 图片信息
+   * Asynchronously load image and return image geometric information
+   * @param src Image path
+   * @param info Image information
    */
   protected loadImg (
     src: string,
@@ -234,9 +234,9 @@ export default class Lucky {
   }
 
   /**
-   * 公共绘制图片的方法
-   * @param imgObj 图片对象
-   * @param rectInfo: [x轴位置, y轴位置, 渲染宽度, 渲染高度] 
+   * Common method for drawing images
+   * @param imgObj Image object
+   * @param rectInfo: [x-axis position, y-axis position, render width, render height] 
    */
   protected drawImage(
     ctx: CanvasRenderingContext2D,
@@ -279,12 +279,12 @@ export default class Lucky {
   }
 
   /**
-   * 计算图片的渲染宽高
-   * @param imgObj 图片标签元素
-   * @param imgInfo 图片信息
-   * @param maxWidth 最大宽度
-   * @param maxHeight 最大高度
-   * @return [渲染宽度, 渲染高度]
+   * Calculate image render width and height
+   * @param imgObj Image tag element
+   * @param imgInfo Image information
+   * @param maxWidth Maximum width
+   * @param maxHeight Maximum height
+   * @return [render width, render height]
    */
   protected computedWidthAndHeight (
     imgObj: ImgType,
@@ -315,10 +315,10 @@ export default class Lucky {
   }
 
   /**
-   * 转换单位
-   * @param { string } value 将要转换的值
-   * @param { number } denominator 分子
-   * @return { number } 返回新的字符串
+   * Convert units
+   * @param { string } value Value to convert
+   * @param { number } denominator Denominator
+   * @return { number } Return new string
    */
   protected changeUnits (value: string, denominator = 1): number {
     const { config } = this

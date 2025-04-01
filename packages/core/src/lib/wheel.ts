@@ -58,9 +58,9 @@ export default class LuckyWheel extends Lucky {
   private ImageCache = new Map()
 
   /**
-   * 大转盘构造器
-   * @param config 配置项
-   * @param data 抽奖数据
+   * Lucky wheel constructor
+   * @param config Configuration
+   * @param data Lottery data
    */
   constructor (config: UserConfigType, data: LuckyWheelConfig) {
     super(config, {
@@ -102,7 +102,7 @@ export default class LuckyWheel extends Lucky {
   }
 
   /**
-   * 初始化数据
+   * Initialize data
    * @param data
    */
   private initData (data: LuckyWheelConfig): void {
@@ -118,7 +118,7 @@ export default class LuckyWheel extends Lucky {
   }
 
   /**
-   * 初始化属性计算
+   * Initialize computed properties
    */
   private initComputed () {
     // 默认配置
@@ -152,7 +152,7 @@ export default class LuckyWheel extends Lucky {
   }
 
   /**
-   * 初始化观察者
+   * Initialize observers
    */
   private initWatch () {
     // 重置宽度
@@ -184,7 +184,7 @@ export default class LuckyWheel extends Lucky {
   }
 
   /**
-   * 初始化 canvas 抽奖
+   * Initialize canvas lottery
    */
   public async init (): Promise<void> {
     this.initLucky()
@@ -224,8 +224,8 @@ export default class LuckyWheel extends Lucky {
   }
 
   /**
-   * canvas点击事件
-   * @param e 事件参数
+   * Canvas click event
+   * @param e Event parameters
    */
   protected handleClick (e: MouseEvent): void {
     const { ctx } = this
@@ -237,11 +237,11 @@ export default class LuckyWheel extends Lucky {
   }
 
   /**
-   * 根据索引单独加载指定图片并缓存
-   * @param cellName 模块名称
-   * @param cellIndex 模块索引
-   * @param imgName 模块对应的图片缓存
-   * @param imgIndex 图片索引
+   * Load and cache specified image by index
+   * @param cellName Module name
+   * @param cellIndex Module index
+   * @param imgName Module image cache
+   * @param imgIndex Image index
    */
   private async loadAndCacheImg (
     cellName: 'blocks' | 'prizes' | 'buttons',
@@ -290,7 +290,7 @@ export default class LuckyWheel extends Lucky {
   }
 
   /**
-   * 开始绘制
+   * Start drawing
    */
   protected draw (): void {
     const { config, ctx, _defaultConfig, _defaultStyle } = this
@@ -447,7 +447,7 @@ export default class LuckyWheel extends Lucky {
   }
 
   /**
-   * 刻舟求剑
+   * Carve on gunwale of moving boat
    */
   private carveOnGunwaleOfAMovingBoat (): void {
     const { _defaultConfig, prizeFlag, prizeDeg, rotateDeg } = this
@@ -469,7 +469,7 @@ export default class LuckyWheel extends Lucky {
   }
 
   /**
-   * 对外暴露: 开始抽奖方法
+   * Exposed: Start lottery method
    */
   public play (): void {
     if (this.step !== 0) return
@@ -486,8 +486,8 @@ export default class LuckyWheel extends Lucky {
   }
 
   /**
-   * 对外暴露: 缓慢停止方法
-   * @param index 中奖索引
+   * Exposed: Slow stop method
+   * @param index Prize index
    */
   public stop (index?: number): void {
     if (this.step === 0 || this.step === 3) return
@@ -507,8 +507,8 @@ export default class LuckyWheel extends Lucky {
   }
 
   /**
-   * 实际开始执行方法
-   * @param num 记录帧动画执行多少次
+   * Actually start execution method
+   * @param num Record how many times frame animation executed
    */
   private run (num: number = 0): void {
     const { rAF, step, prizeFlag, _defaultConfig } = this
@@ -562,7 +562,7 @@ export default class LuckyWheel extends Lucky {
   }
 
   /**
-   * 换算渲染坐标
+   * Convert render coordinates
    * @param x
    * @param y
    */

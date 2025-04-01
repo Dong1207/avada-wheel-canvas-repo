@@ -71,9 +71,9 @@ export default class SlotMachine extends Lucky {
   private ImageCache = new Map()
 
   /**
-   * 老虎机构造器
-   * @param config 配置项
-   * @param data 抽奖数据
+   * Slot machine constructor
+   * @param config Configuration
+   * @param data Lottery data
    */
    constructor (config: UserConfigType, data: SlotMachineConfig) {
     super(config, {
@@ -113,7 +113,7 @@ export default class SlotMachine extends Lucky {
   }
 
   /**
-   * 初始化数据
+   * Initialize data
    * @param data
    */
   private initData (data: SlotMachineConfig): void {
@@ -128,7 +128,7 @@ export default class SlotMachine extends Lucky {
   }
 
   /**
-   * 初始化属性计算
+   * Initialize computed properties
    */
   private initComputed (): void {
     // Default configuration
@@ -164,7 +164,7 @@ export default class SlotMachine extends Lucky {
   }
 
   /**
-   * 初始化观察者
+   * Initialize observers
    */
   private initWatch (): void {
     // Reset width
@@ -196,7 +196,7 @@ export default class SlotMachine extends Lucky {
   }
 
   /**
-   * 初始化 canvas 抽奖
+   * Initialize canvas lottery
    */
   public async init (): Promise<void> {
     this.initLucky()
@@ -237,11 +237,11 @@ export default class SlotMachine extends Lucky {
   }
 
   /**
-   * 根据索引单独加载指定图片并缓存
-   * @param cellName 模块名称
-   * @param cellIndex 模块索引
-   * @param imgName 模块对应的图片缓存
-   * @param imgIndex 图片索引
+   * Load and cache specified image by index
+   * @param cellName Module name
+   * @param cellIndex Module index
+   * @param imgName Module image cache
+   * @param imgIndex Image index
    */
   private async loadAndCacheImg (
     cellName: 'blocks' | 'prizes',
@@ -268,7 +268,7 @@ export default class SlotMachine extends Lucky {
   }
 
   /**
-   * 绘制离屏canvas
+   * Draw offscreen canvas
    */
   protected drawOffscreenCanvas (): void {
     const { _defaultConfig, _defaultStyle } = this
@@ -384,7 +384,7 @@ export default class SlotMachine extends Lucky {
   }
 
   /**
-   * 绘制背景区域
+   * Draw background area
    */
   protected drawBlocks (): SlotMachine['prizeArea'] {
     const { config, ctx, _defaultConfig, _defaultStyle } = this
@@ -418,7 +418,7 @@ export default class SlotMachine extends Lucky {
   }
 
   /**
-   * 绘制老虎机抽奖
+   * Draw slot machine lottery
    */
   protected draw (): void {
     const { config, ctx, _defaultConfig, _defaultStyle } = this
@@ -458,7 +458,7 @@ export default class SlotMachine extends Lucky {
   }
 
   /**
-   * 刻舟求剑
+   * Carve on gunwale of moving boat
    */
   private carveOnGunwaleOfAMovingBoat (): void {
     const { _defaultConfig, prizeFlag, cellAndSpacing } = this
@@ -485,7 +485,7 @@ export default class SlotMachine extends Lucky {
   }
 
   /**
-   * 对外暴露: 开始抽奖方法
+   * Exposed: Start lottery method
    */
    public play (): void {
     if (this.step !== 0) return
@@ -501,6 +501,10 @@ export default class SlotMachine extends Lucky {
     this.run()
   }
 
+  /**
+   * Exposed: Slow stop method
+   * @param index Prize index
+   */
   public stop (index: number | number[]): void {
     if (this.step === 0 || this.step === 3) return
     // 设置中奖索引
@@ -529,8 +533,8 @@ export default class SlotMachine extends Lucky {
   }
 
   /**
-   * 让游戏动起来
-   * @param num 记录帧动画执行多少次
+   * Make game run
+   * @param num Record how many times frame animation executed
    */
   private run (num: number = 0): void {
     const { rAF, step, prizeFlag, _defaultConfig, cellAndSpacing, slots } = this
