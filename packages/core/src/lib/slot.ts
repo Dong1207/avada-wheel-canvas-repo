@@ -22,52 +22,52 @@ import { roundRectByArc } from '../utils/math'
 import { quad } from '../utils/tween'
 
 export default class SlotMachine extends Lucky {
-  // 背景
+  // Background
   private blocks: Array<BlockType> = []
-  // 奖品列表
+  // Prize list
   private prizes: Array<PrizeType> = []
-  // 插槽列表
+  // Slot list
   private slots: Array<SlotType> = []
-  // 默认配置
+  // Default configuration
   private defaultConfig: DefaultConfigType = {}
   private _defaultConfig: Required<DefaultConfigType> = {} as Required<DefaultConfigType>
-  // 默认样式
+  // Default style
   private defaultStyle: DefaultStyleType = {}
   private _defaultStyle: Required<DefaultStyleType> = {} as Required<DefaultStyleType>
   private endCallback: EndCallbackType = () => {}
-  // 离屏canvas
+  // Offscreen canvas
   private _offscreenCanvas?: HTMLCanvasElement
-  private cellWidth = 0             // 格子宽度
-  private cellHeight = 0            // 格子高度
-  private cellAndSpacing = 0        // 格子+间距
-  private widthAndSpacing = 0       // 格子宽度+列间距
-  private heightAndSpacing = 0      // 格子高度+行间距
-  private FPS = 16.6                // 屏幕刷新率
-  private scroll: number[] = []     // 滚动的长度
-  private stopScroll: number[] = [] // 刻舟求剑
-  private endScroll: number[] = []  // 最终停止的长度
-  private startTime = 0             // 开始游戏的时间
-  private endTime = 0               // 开始停止的时间
-  // 默认顺序由 prizes 生成
+  private cellWidth = 0             // Cell width
+  private cellHeight = 0            // Cell height
+  private cellAndSpacing = 0        // Cell + spacing
+  private widthAndSpacing = 0       // Cell width + column spacing
+  private heightAndSpacing = 0      // Cell height + row spacing
+  private FPS = 16.6                // Screen refresh rate
+  private scroll: number[] = []     // Scroll length
+  private stopScroll: number[] = [] // Stop scroll position
+  private endScroll: number[] = []  // Final stop length
+  private startTime = 0             // Start timestamp
+  private endTime = 0               // Stop timestamp
+  // Default order generated from prizes
   private defaultOrder: number[] = []
   /**
-   * 游戏当前的阶段
-   * step = 0 时, 游戏尚未开始
-   * step = 1 时, 此时处于加速阶段
-   * step = 2 时, 此时处于匀速阶段
-   * step = 3 时, 此时处于减速阶段
+   * Current game stage
+   * step = 0: Game has not started
+   * step = 1: Currently in acceleration phase
+   * step = 2: Currently in constant speed phase
+   * step = 3: Currently in deceleration phase
    */
   private step: 0 | 1 | 2 | 3 = 0
   /**
-   * 中奖索引
-   * prizeFlag = undefined 时, 处于开始抽奖阶段, 正常旋转
-   * prizeFlag >= 0 时, 说明stop方法被调用, 并且传入了中奖索引
-   * prizeFlag === -1 时, 说明stop方法被调用, 并且传入了负值, 本次抽奖无效
+   * Prize index
+   * prizeFlag = undefined: In start lottery phase, normal rotation
+   * prizeFlag >= 0: Stop method was called with winning index
+   * prizeFlag === -1: Stop method was called with negative value, lottery invalid
    */
   private prizeFlag: number[] | undefined = void 0
-  // 奖品区域几何信息
+  // Prize area geometric information
   private prizeArea?: { x: number, y: number, w: number, h: number }
-  // 图片缓存
+  // Image cache
   private ImageCache = new Map()
 
   /**
@@ -83,9 +83,9 @@ export default class SlotMachine extends Lucky {
     this.initData(data)
     this.initWatch()
     this.initComputed()
-    // 创建前回调函数
+    // Create before callback
     config.beforeCreate?.call(this)
-    // 首次初始化
+    // First initialization
     this.init()
   }
 
@@ -131,7 +131,7 @@ export default class SlotMachine extends Lucky {
    * 初始化属性计算
    */
   private initComputed (): void {
-    // 默认配置
+    // Default configuration
     this.$computed(this, '_defaultConfig', () => {
       const config = {
         mode: 'vertical',
@@ -147,7 +147,7 @@ export default class SlotMachine extends Lucky {
       config.colSpacing = this.getLength(config.colSpacing)
       return config
     })
-    // 默认样式
+    // Default style
     this.$computed(this, '_defaultStyle', () => {
       return {
         borderRadius: 0,
@@ -167,26 +167,26 @@ export default class SlotMachine extends Lucky {
    * 初始化观察者
    */
   private initWatch (): void {
-    // 重置宽度
+    // Reset width
     this.$watch('width', (newVal: string | number) => {
       this.data.width = newVal
       this.resize()
     })
-    // 重置高度
+    // Reset height
     this.$watch('height', (newVal: string | number) => {
       this.data.height = newVal
       this.resize()
     })
-    // 监听 blocks 数据的变化
+    // Watch blocks data changes
     this.$watch('blocks', (newData: Array<BlockType>) => {
       this.initImageCache()
     }, { deep: true })
-    // 监听 prizes 数据的变化
+    // Watch prizes data changes
     this.$watch('prizes', (newData: Array<PrizeType>) => {
       this.initImageCache()
     }, { deep: true })
-    // 监听 prizes 数据的变化
-    this.$watch('slots', (newData: Array<PrizeType>) => {
+    // Watch slots data changes
+    this.$watch('slots', (newData: Array<SlotType>) => {
       this.drawOffscreenCanvas()
       this.draw()
     }, { deep: true })
@@ -201,14 +201,14 @@ export default class SlotMachine extends Lucky {
   public async init (): Promise<void> {
     this.initLucky()
     const { config } = this
-    // 初始化前回调函数
+    // Initialize before callback
     config.beforeInit?.call(this)
-    // 先绘制一次
+    // Draw once first
     this.drawOffscreenCanvas()
     this.draw()
-    // 异步加载图片
+    // Async load images
     await this.initImageCache()
-    // 初始化后回调函数
+    // Initialize after callback
     config.afterInit?.call(this)
   }
 
@@ -535,7 +535,7 @@ export default class SlotMachine extends Lucky {
   private run (num: number = 0): void {
     const { rAF, step, prizeFlag, _defaultConfig, cellAndSpacing, slots } = this
     const { accelerationTime, decelerationTime } = _defaultConfig
-    // 游戏结束
+    // Game over
     if (this.step === 0 && prizeFlag?.length === slots.length) {
       let flag = prizeFlag[0]
       for (let i = 0; i < slots.length; i++) {
@@ -549,14 +549,14 @@ export default class SlotMachine extends Lucky {
       this.endCallback?.(this.prizes.find((prize, index) => index === flag) || void 0)
       return
     }
-    // 如果长度为 0 就直接停止游戏
+    // If length is 0 then stop game directly
     if (prizeFlag !== void 0 && !prizeFlag.length) return
-    // 计算最终停止的位置
+    // Calculate final stop position
     if (this.step === 3 && !this.endScroll.length) this.carveOnGunwaleOfAMovingBoat()
-    // 计算时间间隔
+    // Calculate time interval
     const startInterval = Date.now() - this.startTime
     const endInterval = Date.now() - this.endTime
-    // 分别计算对应插槽的加速度
+    // Calculate acceleration for corresponding slots
     slots.forEach((slot, slotIndex) => {
       const order = slot.order || this.defaultOrder
       if (!order || !order.length) return
@@ -564,27 +564,27 @@ export default class SlotMachine extends Lucky {
       const speed = Math.abs(slot.speed || _defaultConfig.speed)
       const direction = slot.direction || _defaultConfig.direction
       let scroll = 0, prevScroll = this.scroll[slotIndex]
-      if (step === 1 || startInterval < accelerationTime) { // 加速阶段
-        // 记录帧率
+      if (step === 1 || startInterval < accelerationTime) { // Acceleration phase
+        // Record frame rate
         this.FPS = startInterval / num
         const currSpeed = quad.easeIn(startInterval, 0, speed, accelerationTime)
-        // 加速到最大速度后, 即可进入匀速阶段
+        // After accelerating to peak speed, enter constant speed phase
         if (currSpeed === speed) {
           this.step = 2
         }
         scroll = (prevScroll + (currSpeed * direction)) % _p
-      } else if (step === 2) { // 匀速阶段
-        // 速度保持不变
+      } else if (step === 2) { // Constant speed phase
+        // Speed remains unchanged
         scroll = (prevScroll + (speed * direction)) % _p
-        // 如果有 prizeFlag 有值, 则进入减速阶段
+        // If prizeFlag has value, enter deceleration phase
         if (prizeFlag?.length === slots.length) {
           this.step = 3
-          // 清空上一轮的位置信息
+          // Clear previous position info
           this.stopScroll = []
           this.endScroll = []
         }
-      } else if (step === 3 && endInterval) { // 减速阶段
-        // 开始缓慢停止
+      } else if (step === 3 && endInterval) { // Deceleration phase
+        // Start slowing down
         const stopScroll = this.stopScroll[slotIndex]
         const endScroll = this.endScroll[slotIndex]
         scroll = quad.easeOut(endInterval, stopScroll, endScroll, decelerationTime)
@@ -598,12 +598,12 @@ export default class SlotMachine extends Lucky {
     rAF(this.run.bind(this, num + 1))
   }
 
-  // 根据mode置换数值
+  // Swap values according to mode
   private displacement<T> (a: T, b: T): T {
     return this._defaultConfig.mode === 'horizontal' ? b : a
   }
 
-  // 根据mode计算宽高
+  // Calculate width and height according to mode
   private displacementWidthOrHeight () {
     const mode = this._defaultConfig.mode
     const slotsLen = this.slots.length

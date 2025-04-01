@@ -1,4 +1,4 @@
-import '../utils/polyfill'
+import '../utils/polyfill'
 import { has, isExpectType, throttle } from '../utils/index'
 import { name, version } from '../../package.json'
 import { ConfigType, UserConfigType, ImgItemType, ImgType, Tuple } from '../types/index'
@@ -20,7 +20,7 @@ export default class Lucky {
   }
 
   /**
-   * 公共构造器
+   * Common constructor
    * @param config
    */
   constructor (
@@ -30,41 +30,41 @@ export default class Lucky {
       height: string | number
     }
   ) {
-    // 兼容代码开始: 为了处理 v1.0.6 版本在这里传入了一个 dom
+    // Compatibility code start: To handle v1.0.6 version where a dom was passed here
     if (typeof config === 'string') config = { el: config } as UserConfigType
     else if (config.nodeType === 1) config = { el: '', divElement: config } as UserConfigType
-    // 这里先野蛮的处理, 等待后续优化, 对外暴露的类型是UserConfigType, 但内部期望是ConfigType
+    // Handle roughly here, pending optimization, externally exposed type is UserConfigType, but internally expected is ConfigType
     config = config as UserConfigType
     this.config = config as ConfigType
     this.data = data
-    // 开始初始化
+    // Start initialization
     if (!config.flag) config.flag = 'WEB'
     if (config.el) config.divElement = document.querySelector(config.el) as HTMLDivElement
-    // 如果存在父盒子, 就创建canvas标签
+    // If parent box exists, create canvas tag
     if (config.divElement) {
-      // 无论盒子内有没有canvas都执行覆盖逻辑
+      // Execute overwrite logic regardless of whether there is canvas in the box
       config.canvasElement = document.createElement('canvas')
       config.divElement.appendChild(config.canvasElement)
     }
-    // 获取 canvas 上下文
+    // Get canvas context
     if (config.canvasElement) {
       config.ctx = config.canvasElement.getContext('2d')!
-      // 添加版本信息到标签上, 方便定位版本问题
+      // Add version info to tag for version issue tracking
       config.canvasElement.setAttribute('package', `${name}@${version}`)
       config.canvasElement.addEventListener('click', e => this.handleClick(e))
     }
     this.ctx = config.ctx as CanvasRenderingContext2D
-    // 初始化 window 方法
+    // Initialize window methods
     this.initWindowFunction()
-    // 如果最后得不到 canvas 上下文那就无法进行绘制
+    // If canvas context cannot be obtained, drawing cannot proceed
     if (!this.config.ctx) {
-      console.error('无法获取到 CanvasContext2D')
+      console.error('Unable to get CanvasContext2D')
     }
-    // 监听 window 触发 resize 时重置
+    // Listen for window resize event to reset
     if (window && typeof window.addEventListener === 'function') {
       window.addEventListener('resize', throttle(() => this.resize(), 300))
     }
-    // 监听异步设置 html 的 fontSize 并重新绘制
+    // Listen for async setting of html fontSize and redraw
     if (window && typeof window.MutationObserver === 'function') {
       new window.MutationObserver(() => {
         this.resize()
@@ -77,13 +77,13 @@ export default class Lucky {
    */
   protected resize(): void {
     this.config.beforeResize?.()
-    // 先初始化 fontSize 以防后面有 rem 单位
+    // Initialize fontSize first to prevent rem unit issues later
     this.setHTMLFontSize()
-    // 拿到 config 即可设置 dpr
+    // Get config to set dpr
     this.setDpr()
-    // 初始化宽高
+    // Initialize width and height
     this.resetWidthAndHeight()
-    // 根据 dpr 来缩放 canvas
+    // Scale canvas according to dpr
     this.zoomCanvas()
   }
 
@@ -124,7 +124,7 @@ export default class Lucky {
   protected setDpr (): void {
     const { config } = this
     if (config.dpr) {
-      // 优先使用 config 传入的 dpr
+      // Priority use dpr from config
     } else if (window) {
       window['dpr'] = config.dpr = window.devicePixelRatio || 1
     } else if (!config.dpr) {
@@ -137,16 +137,16 @@ export default class Lucky {
    */
   private resetWidthAndHeight (): void {
     const { config, data } = this
-    // 如果是浏览器环境并且存在盒子
+    // If in browser environment and box exists
     let boxWidth = 0, boxHeight = 0
     if (config.divElement) {
       boxWidth = config.divElement.offsetWidth
       boxHeight = config.divElement.offsetHeight
     }
-    // 先从 data 里取宽高, 如果 config 上面没有, 就从 style 上面取
+    // First get width/height from data, if not in config, get from style
     this.boxWidth = this.getLength(data.width || config['width']) || boxWidth
     this.boxHeight = this.getLength(data.height || config['height']) || boxHeight
-    // 重新把宽高赋给盒子
+    // Reassign width and height to box
     if (config.divElement) {
       config.divElement.style.overflow = 'hidden'
       config.divElement.style.width = this.boxWidth + 'px'
@@ -190,14 +190,14 @@ export default class Lucky {
       return
     }
     if (config.rAF) {
-      // 优先使用帧动画
+      // Priority use animation frame
       this.rAF = config.rAF
     } else if (config.setTimeout) {
-      // 其次使用定时器
+      // Otherwise use timer
       const timeout = config.setTimeout
       this.rAF = (callback: Function): number => timeout(callback, 16.7)
     } else {
-      // 如果config里面没有提供, 那就假设全局方法存在setTimeout
+      // If config doesn't provide, assume global setTimeout exists
       this.rAF = (callback: Function): number => setTimeout(callback, 16.7)
     }
   }
@@ -225,7 +225,7 @@ export default class Lucky {
         imgObj.onerror = () => reject(`=> '${info.src}' 图片加载失败`)
         imgObj.src = src
       } else {
-        // 其余平台向外暴露, 交给外部自行处理
+        // Other platforms expose externally for self-handling
         info[resolveName] = resolve
         info['$reject'] = reject
         return
@@ -246,15 +246,15 @@ export default class Lucky {
     let drawImg
     const { flag, dpr } = this.config
     if (['WEB', 'MP-WX'].includes(flag)) {
-      // 浏览器和新版小程序中直接绘制即可
+      // Browser and new mini-program versions can draw directly
       drawImg = imgObj
     } else if (['UNI-H5', 'UNI-MP', 'TARO-H5', 'TARO-MP'].includes(flag)) {
-      // 旧版本的小程序需要绘制 path, 这里特殊处理一下
+      // Old mini-program versions need to draw path, special handling here
       type OldImageType = ImgType & { path: CanvasImageSource }
       drawImg = (imgObj as OldImageType).path
     } else {
-      // 如果传入了未知的标识
-      return console.error('意料之外的 flag, 该平台尚未兼容!')
+      // Unknown flag platform passed in
+      return console.error('Unexpected flag, platform not yet compatible!')
     }
     const miniProgramOffCtx = (drawImg['canvas'] || drawImg).getContext?.('2d')
     if (miniProgramOffCtx && !this.isWeb()) {
@@ -265,16 +265,15 @@ export default class Lucky {
       if (rectInfo.length === 8) {
         rectInfo = rectInfo.map((val, index) => index < 4 ? val! * dpr : val) as Tuple<number, 8>
       }
-      // 尝试捕获错误
+      // Try to catch errors
       try {
         ctx.drawImage(drawImg, ...rectInfo as Tuple<number, 8>)
       } catch (err) {
         /**
-         * TODO: safari浏览器下, init() 会出现奇怪的报错
+         * TODO: Safari browser has strange error in init()
          * IndexSizeError: The index is not in the allowed range
-         * 但是这个报错并不影响实际的绘制, 目前先放一放, 等待有缘人
+         * But this error doesn't affect actual drawing, leave it for now
          */
-        // console.log(err)
       }
     }
   }
@@ -293,22 +292,22 @@ export default class Lucky {
     maxWidth: number,
     maxHeight: number
   ): [number, number] {
-    // 根据配置的样式计算图片的真实宽高
+    // Calculate image's true width and height based on style config
     if (!imgInfo.width && !imgInfo.height) {
-      // 如果没有配置宽高, 则使用图片本身的宽高
+      // If no width/height configured, use image's own dimensions
       return [imgObj.width, imgObj.height]
     } else if (imgInfo.width && !imgInfo.height) {
-      // 如果只填写了宽度, 没填写高度
+      // If only width specified, no height
       let trueWidth = this.getLength(imgInfo.width, maxWidth)
-      // 那高度就随着宽度进行等比缩放
+      // Height scales proportionally with width
       return [trueWidth, imgObj.height * (trueWidth / imgObj.width)]
     } else if (!imgInfo.width && imgInfo.height) {
-      // 如果只填写了宽度, 没填写高度
+      // If only height specified, no width
       let trueHeight = this.getLength(imgInfo.height, maxHeight)
-      // 那宽度就随着高度进行等比缩放
+      // Width scales proportionally with height
       return [imgObj.width * (trueHeight / imgObj.height), trueHeight]
     }
-    // 如果宽度和高度都填写了, 就如实计算
+    // If both width and height specified, calculate as is
     return [
       this.getLength(imgInfo.width, maxWidth),
       this.getLength(imgInfo.height, maxHeight)
@@ -331,7 +330,7 @@ export default class Lucky {
         'vw': (n: number) => n / 100 * window.innerWidth,
       }[unit]
       if (handleCssUnit) return handleCssUnit(num)
-      // 如果找不到默认单位, 就交给外面处理
+      // If default unit not found, pass to external handler
       const otherHandleCssUnit = config.handleCssUnit || config['unitFunc']
       return otherHandleCssUnit ? otherHandleCssUnit(num, unit) : num
     }))
@@ -422,13 +421,13 @@ export default class Lucky {
       watchOpt = handler
       handler = watchOpt.handler!
     }
-    // 创建 user watcher
+    // Create user watcher
     const watcher = new Watcher(this, expr, handler, watchOpt)
-    // 判断是否需要初始化时触发回调
+    // Check if callback should be triggered on initialization
     if (watchOpt.immediate) {
       handler.call(this, watcher.value)
     }
-    // 返回一个卸载当前观察者的函数
+    // Return a function to uninstall current observer
     return function unWatchFn () {}
   }
 }

@@ -29,30 +29,30 @@ export default class LuckyWheel extends Lucky {
   private _defaultStyle: Required<DefaultStyleType> = {} as Required<DefaultStyleType>
   private startCallback?: StartCallbackType
   private endCallback?: EndCallbackType
-  private Radius = 0                    // 大转盘半径
-  private prizeRadius = 0               // 奖品区域半径
-  private prizeDeg = 0                  // 奖品数学角度
-  private prizeAng = 0               // 奖品运算角度
-  private rotateDeg = 0                 // 转盘旋转角度
-  private maxBtnRadius = 0              // 最大按钮半径
-  private startTime = 0                 // 开始时间戳
-  private endTime = 0                   // 停止时间戳
-  private stopDeg = 0                   // 刻舟求剑
-  private endDeg = 0                    // 停止角度
-  private FPS = 16.6                    // 屏幕刷新率
+  private Radius = 0                    // Wheel radius
+  private prizeRadius = 0               // Prize area radius
+  private prizeDeg = 0                  // Prize mathematical angle
+  private prizeAng = 0                  // Prize calculation angle
+  private rotateDeg = 0                 // Wheel rotation angle
+  private maxBtnRadius = 0              // Maximum button radius
+  private startTime = 0                 // Start timestamp
+  private endTime = 0                   // Stop timestamp
+  private stopDeg = 0                   // Stop degree
+  private endDeg = 0                    // End degree
+  private FPS = 16.6                    // Screen refresh rate
   /**
-   * 游戏当前的阶段
-   * step = 0 时, 游戏尚未开始
-   * step = 1 时, 此时处于加速阶段
-   * step = 2 时, 此时处于匀速阶段
-   * step = 3 时, 此时处于减速阶段
+   * Current game stage
+   * step = 0: Game has not started
+   * step = 1: Currently in acceleration phase
+   * step = 2: Currently in constant speed phase
+   * step = 3: Currently in deceleration phase
    */
   private step: 0 | 1 | 2 | 3 = 0
   /**
-   * 中奖索引
-   * prizeFlag = undefined 时, 处于开始抽奖阶段, 正常旋转
-   * prizeFlag >= 0 时, 说明stop方法被调用, 并且传入了中奖索引
-   * prizeFlag === -1 时, 说明stop方法被调用, 并且传入了负值, 本次抽奖无效
+   * Prize index
+   * prizeFlag = undefined: In start lottery phase, normal rotation
+   * prizeFlag >= 0: Stop method was called with winning index
+   * prizeFlag === -1: Stop method was called with negative value, lottery invalid
    */
   private prizeFlag: number | undefined
   private ImageCache = new Map()
