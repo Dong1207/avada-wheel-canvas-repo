@@ -18,7 +18,7 @@ export default defineConfig({
         },
       },
     },
-    minify: 'esbuild',
+    minify: "esbuild",
     sourcemap: true,
     target: "esnext",
     chunkSizeWarningLimit: 1000,
@@ -29,8 +29,5 @@ export default defineConfig({
       include: ["src/**/*.ts"],
     }),
   ],
-  server: {
-    port: 3002,
-    open: "/examples/wheel.html",
-  },
+  server: {port: 3002},
 });
