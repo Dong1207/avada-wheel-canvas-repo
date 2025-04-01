@@ -2,14 +2,14 @@
   "name": "lucky-canvas",
   "version": "1.7.26",
   "description": "一个基于原生 js 的（大转盘 / 九宫格 / 老虎机）抽奖插件",
-  "main": "dist/index.cjs.js",
+  "type": "module",
+  "main": "dist/index.esm.js",
   "module": "dist/index.esm.js",
-  "unpkg": "dist/index.umd.js",
-  "jsdelivr": "dist/index.umd.js",
   "types": "types/index.d.ts",
   "scripts": {
-    "dev": "rollup --config rollup.config.dev.js -w",
-    "build": "rollup --config rollup.config.build.js",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "clean": "rimraf dist types"
   },
   "homepage": "https://100px.net",
@@ -23,8 +23,7 @@
   "license": "Apache-2.0",
   "files": [
     "dist",
-    "types",
-    "index.js"
+    "types"
   ],
   "keywords": [
     "lucky wheel",
@@ -36,26 +35,11 @@
     "canvas lottery"
   ],
   "devDependencies": {
-    "@babel/core": "^7.12.3",
-    "@babel/preset-env": "^7.12.1",
-    "@babel/preset-typescript": "^7.21.0",
-    "@babel/plugin-transform-runtime": "^7.16.4",
-    "@babel/runtime": "^7.16.3",
-    "@rollup/plugin-commonjs": "^16.0.0",
-    "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^10.0.0",
-    "@rollup/plugin-typescript": "^8.3.3",
     "@types/node": "^14.14.22",
-    "babel-plugin-external-helpers": "^6.22.0",
-    "babel-preset-latest": "^6.24.1",
     "rimraf": "^3.0.2",
-    "rollup": "^2.33.1",
-    "rollup-plugin-babel": "^4.4.0",
-    "rollup-plugin-delete": "^2.0.0",
-    "rollup-plugin-dts": "^4.2.2",
-    "rollup-plugin-terser": "^7.0.2",
-    "tslib": "^2.5.0",
-    "typescript": "^4.7.4"
+    "typescript": "^4.7.4",
+    "vite": "^5.0.0",
+    "vite-plugin-dts": "^3.0.0"
   },
   "dependencies": {}
 }

@@ -1,19 +1,24 @@
 {
   "name": "lucky-canvas",
-  "devDependencies": {
-    "lerna": "^4.0.0"
-  },
-  "scripts": {
-    "install": "lerna bootstrap",
-    "dev": "lerna exec --scope=lucky-canvas -- npm run dev",
-    "dev:react": "lerna run --scope=lucky-canvas --scope=@lucky-canvas/react dev --parallel",
-    "build": "lerna run build --sort --stream",
-    "update-version": "lerna version --conventional-commits --no-push --no-changelog --no-git-tag-version",
-    "publish-to-npm": "lerna publish from-package",
-    "publish-beta": "lerna publish --no-git-tag-version --dist-tag beta"
-  },
+  "version": "1.7.26",
   "private": true,
   "workspaces": [
-    "packages/*"
-  ]
+    "packages/core",
+    "packages/react"
+  ],
+  "scripts": {
+    "dev": "yarn workspaces run dev",
+    "dev:react": "yarn workspace @lucky-canvas/react dev",
+    "build": "yarn workspaces run build",
+    "update-version": "yarn workspaces version",
+    "publish-to-npm": "yarn workspaces publish",
+    "publish-beta": "yarn workspaces publish --tag beta",
+    "clean": "yarn workspaces run clean",
+    "preview": "yarn workspaces run preview"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "vite": "^5.0.0",
+    "@vitejs/plugin-react": "^4.0.0"
+  }
 }
