@@ -1,11 +1,11 @@
 /**
- * 缓动函数
- * t: current time（当前时间）
- * b: beginning value（初始值）
- * c: change in value（变化量）
- * d: duration（持续时间）
+ * Easing functions
+ * t: current time
+ * b: beginning value
+ * c: change in value
+ * d: duration
  * 
- * 感谢张鑫旭大佬 https://github.com/zhangxinxu/Tween
+ * Thanks to Zhang Xinxu https://github.com/zhangxinxu/Tween
  */
 
 interface SpeedType {
@@ -13,7 +13,7 @@ interface SpeedType {
   easeOut: (...arr: number[]) => number
 }
 
-// 二次方的缓动
+// Quadratic easing
 export const quad: SpeedType = {
   easeIn: function (t, b, c, d) {
     if (t >= d) t = d
@@ -25,7 +25,7 @@ export const quad: SpeedType = {
   }
 }
 
-// 三次方的缓动
+// Cubic easing
 export const cubic: SpeedType = {
   easeIn: function (t, b, c, d) {
     if (t >= d) t = d
@@ -37,7 +37,7 @@ export const cubic: SpeedType = {
   }
 }
 
-// 四次方的缓动
+// Quartic easing
 export const quart: SpeedType = {
   easeIn: function (t, b, c, d) {
     if (t >= d) t = d
@@ -49,7 +49,7 @@ export const quart: SpeedType = {
   }
 }
 
-// 五次方的缓动
+// Quintic easing
 export const quint: SpeedType = {
   easeIn: function (t, b, c, d) {
     if (t >= d) t = d
@@ -61,7 +61,7 @@ export const quint: SpeedType = {
   }
 }
 
-// 正弦曲线的缓动
+// Sine curve easing
 export const sine: SpeedType = {
   easeIn: function (t, b, c, d) {
     if (t >= d) t = d
@@ -73,7 +73,7 @@ export const sine: SpeedType = {
   }
 }
 
-// 指数曲线的缓动
+// Exponential curve easing
 export const expo: SpeedType = {
   easeIn: function (t, b, c, d) {
     if (t >= d) t = d
@@ -85,7 +85,7 @@ export const expo: SpeedType = {
   }
 }
 
-// 圆形曲线的缓动
+// Circular curve easing
 export const circ: SpeedType = {
   easeIn: function (t, b, c, d) {
     if (t >= d) t = d

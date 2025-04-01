@@ -38,24 +38,24 @@ export type SlotType = {
 
 export type DefaultConfigType = {
   /**
-   * vertical 为纵向旋转
-   * horizontal 为横向旋转
+   * vertical for vertical rotation
+   * horizontal for horizontal rotation
    */
   mode?: 'vertical' | 'horizontal'
   /**
-   * 当排列方向 = `vertical`时
+   * When arrangement direction = `vertical`:
    *    1 bottom to top
    *   -1 top to bottom
-   * 当排列方向 = `horizontal`时
+   * When arrangement direction = `horizontal`:
    *    1 right to left
    *   -1 left to right
    */
   direction?: 1 | -1
-  // 行间距
+  // Row spacing
   rowSpacing?: number
-  // 列间距
+  // Column spacing
   colSpacing?: number
-  // 速度
+  // Speed
   speed?: number
   accelerationTime?: number
   decelerationTime?: number

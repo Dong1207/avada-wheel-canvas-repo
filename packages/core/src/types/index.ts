@@ -1,4 +1,4 @@
-// 字体类型
+// Font type
 export type FontItemType = {
   text: string
   top?: string | number
@@ -18,7 +18,7 @@ export type FontExtendType = {
 
 export type ImgType = HTMLImageElement | HTMLCanvasElement
 
-// 图片类型
+// Image type
 export type ImgItemType = {
   src: string
   top?: string | number
@@ -35,9 +35,9 @@ export type BackgroundType = string
 export type ShadowType = string
 
 export type ConfigType = {
-  // 临时处理元素类型, 当版本升到4.x之后就可以删掉了
+  // Temporary element type handling, can be removed after version 4.x
   nodeType?: number
-  // 配置
+  // Configuration
   flag: 'WEB' | 'MP-WX' | 'UNI-H5' | 'UNI-MP' | 'TARO-H5' | 'TARO-MP'
   el?: string
   divElement?: HTMLDivElement
@@ -45,13 +45,13 @@ export type ConfigType = {
   ctx: CanvasRenderingContext2D
   dpr: number
   handleCssUnit?: (num: number, unit: string) => number
-  // 覆盖方法
+  // Override methods
   rAF?: Function
   setTimeout: Function
   setInterval: Function
   clearTimeout: Function
   clearInterval: Function
-  // 组件生命周期
+  // Component lifecycle
   beforeCreate?: Function
   beforeResize?: Function
   afterResize?: Function
