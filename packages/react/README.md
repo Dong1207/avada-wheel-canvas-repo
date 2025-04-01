@@ -1,3 +1,45 @@
+# Lucky Canvas React
+
+A React component library for lucky draw games, including Lucky Wheel, Lucky Grid, and Slot Machine components.
+
+## Installation
+
+```bash
+npm install lucky-canvas-react
+# or
+yarn add lucky-canvas-react
+```
+
+## Usage
+
+```jsx
+import { LuckyWheel, LuckyGrid, SlotMachine } from 'lucky-canvas-react'
+
+function App() {
+  return (
+    <div>
+      <LuckyWheel />
+      <LuckyGrid />
+      <SlotMachine />
+    </div>
+  )
+}
+```
+
+## Components
+
+### LuckyWheel
+A wheel component for lucky draw games.
+
+### LuckyGrid
+A grid component for lucky draw games.
+
+### SlotMachine
+A slot machine component for lucky draw games.
+
+## License
+
+MIT
 
 <div align="center">
   <img src="https://unpkg.com/buuing@0.0.1/imgs/lucky-canvas.png" width="128" alt="logo" />

@@ -1,6 +1,6 @@
 {
-  "name": "lucky-canvas",
-  "version": "1.7.26",
+  "name": "avada-wheel-canvas",
+  "version": "1.0.0",
   "description": "A native JS lottery plugin (Lucky Wheel / Lucky Grid / Slot Machine)",
   "type": "module",
   "main": "dist/index.esm.js",
@@ -12,15 +12,14 @@
     "preview": "vite preview",
     "clean": "rimraf dist types"
   },
-  "homepage": "https://100px.net",
-  "bugs": "https://github.com/LuckDraw/lucky-canvas/issues",
+  "homepage": "https://github.com/yourusername/avada-wheel-canvas",
+  "bugs": "https://github.com/yourusername/avada-wheel-canvas/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LuckDraw/lucky-canvas.git",
-    "directory": "packages/lucky-canvas"
+    "url": "git+https://github.com/yourusername/avada-wheel-canvas.git"
   },
-  "author": "ldq <ldq404@qq.com>",
-  "license": "Apache-2.0",
+  "author": "Your Name",
+  "license": "MIT",
   "files": [
     "dist",
     "types"

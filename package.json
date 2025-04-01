@@ -1,6 +1,6 @@
 {
-  "name": "lucky-canvas",
-  "version": "1.7.26",
+  "name": "avada-wheel-canvas",
+  "version": "1.0.0",
   "private": true,
   "workspaces": [
     "packages/core",
@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "dev": "yarn workspaces run dev",
-    "dev:react": "yarn workspace @lucky-canvas/react dev",
+    "dev:react": "yarn workspace avada-wheel-canvas-react dev",
     "build": "yarn workspaces run build",
     "update-version": "yarn workspaces version",
     "publish-to-npm": "yarn workspaces publish",
