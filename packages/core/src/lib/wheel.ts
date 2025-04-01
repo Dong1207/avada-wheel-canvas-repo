@@ -368,6 +368,7 @@ export default class LuckyWheel extends Lucky {
         const wordWrap = has(font, 'wordWrap') ? font.wordWrap : _defaultStyle.wordWrap
         const lengthLimit = font.lengthLimit || _defaultStyle.lengthLimit
         const lineClamp = font.lineClamp || _defaultStyle.lineClamp
+        const rotate = font.rotate || 0
         ctx.fillStyle = fontColor
         ctx.font = `${fontWeight} ${fontSize >> 0}px ${fontStyle}`
         let lines = [], text = String(font.text)
@@ -385,7 +386,13 @@ export default class LuckyWheel extends Lucky {
           lines = text.split('\n')
         }
         lines.filter(line => !!line).forEach((line, lineIndex) => {
-          ctx.fillText(line, getFontX(font, line), getFontY(font, prizeHeight, lineIndex))
+          const x = getFontX(font, line)
+          const y = getFontY(font, prizeHeight, lineIndex)
+          ctx.save()
+          ctx.translate(x, y)
+          ctx.rotate(getAngle(rotate))
+          ctx.fillText(line, 0, 0)
+          ctx.restore()
         })
       })
       // 修正旋转角度和原点坐标

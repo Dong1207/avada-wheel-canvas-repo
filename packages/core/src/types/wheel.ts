@@ -5,7 +5,15 @@ import {
   FontExtendType
 } from './index'
 
-export type PrizeFontType = FontItemType & FontExtendType
+export type PrizeFontType = FontItemType & {
+  text: string | number
+  top?: string | number
+  left?: string | number
+  rotate?: number
+  wordWrap?: boolean
+  lengthLimit?: string | number
+  lineClamp?: number
+}
 
 export type ButtonFontType = FontItemType & {}
 
