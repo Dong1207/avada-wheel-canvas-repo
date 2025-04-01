@@ -1,6 +1,9 @@
 import {defineConfig} from "vite";
 import dts from "vite-plugin-dts";
 import {resolve} from "path";
+import {fileURLToPath} from "url";
+
+const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
 export default defineConfig({
   build: {
@@ -19,9 +22,11 @@ export default defineConfig({
       },
     },
     minify: "esbuild",
-    sourcemap: true,
+    sourcemap: false,
     target: "esnext",
     chunkSizeWarningLimit: 1000,
+    outDir: "dist",
+    emptyOutDir: true,
   },
   plugins: [
     dts({

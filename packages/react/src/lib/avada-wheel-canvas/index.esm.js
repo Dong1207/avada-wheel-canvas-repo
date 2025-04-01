@@ -1430,4 +1430,3 @@ export {
   kt as cutRound,
   Lt as opacity
 };
-//# sourceMappingURL=index.esm.js.map
