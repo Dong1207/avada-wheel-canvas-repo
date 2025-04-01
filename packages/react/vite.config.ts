@@ -16,7 +16,6 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      // Alias để import từ thư mục lib
       "@lib": resolve(__dirname, "src/lib"),
     },
   },
@@ -34,9 +33,12 @@ export default defineConfig({
           react: "React",
           "react-dom": "ReactDOM",
         },
+        exports: "named",
       },
     },
     sourcemap: true,
+    outDir: "dist",
+    emptyOutDir: true,
   },
   server: {
     port: 3001,
