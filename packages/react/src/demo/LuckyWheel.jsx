@@ -1,4 +1,4 @@
-import LuckyWheel from "../components/LuckyWheel.js";
+import LuckyWheel from "../components/LuckyWheel";
 import React from "react";
 
 export default class Wheel extends React.Component {

@@ -1,36 +1,28 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import dts from 'vite-plugin-dts'
-import { resolve } from 'path'
+import {defineConfig} from "vite";
+import react from "@vitejs/plugin-react";
+import {resolve} from "path";
 
 export default defineConfig({
-  plugins: [
-    react(),
-    dts({
-      insertTypesEntry: true,
-      include: ['src/**/*.ts', 'src/**/*.tsx']
-    })
-  ],
+  plugins: [react()],
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
-      name: 'ReactLuckyCanvas',
-      formats: ['es'],
-      fileName: (format) => `index.${format === 'es' ? 'esm' : format}.js`
+      entry: resolve(__dirname, "src/index.jsx"),
+      name: "LuckyCanvasReact",
+      fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
-      external: ['react', 'lucky-canvas'],
+      external: ["react", "react-dom"],
       output: {
         globals: {
-          react: 'React',
-          'lucky-canvas': 'LuckyCanvas'
-        }
-      }
+          react: "React",
+          "react-dom": "ReactDOM",
+        },
+      },
     },
-    sourcemap: true
+    sourcemap: true,
   },
   server: {
     port: 3001,
-    open: '/example/react18.0.html'
-  }
-}) 
+    open: true,
+  },
+});
