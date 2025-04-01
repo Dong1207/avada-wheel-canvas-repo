@@ -1,8 +1,9 @@
 {
   "packages": [
-    "packages/*"
+    "packages/core",
+    "packages/react"
   ],
-  "version": "0.0.4",
+  "version": "independent",
   "npmClient": "npm",
   "useWorkspaces": true
 }
