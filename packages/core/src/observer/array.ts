@@ -1,5 +1,5 @@
 /**
- * 重写数组的原型方法
+ * Override array prototype methods
  */
 const oldArrayProto = Array.prototype
 const newArrayProto = Object.create(oldArrayProto)

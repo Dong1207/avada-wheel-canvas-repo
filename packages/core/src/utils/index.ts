@@ -1,8 +1,8 @@
 /**
- * 判断是否是期望的类型
- * @param { unknown } param 将要判断的变量
- * @param { ...string } types 期望的类型
- * @return { boolean } 返回期望是否正确
+ * Check if type is expected
+ * @param { unknown } param Variable to check
+ * @param { ...string } types Expected types
+ * @return { boolean } Returns if expectation is correct
  */
 export const isExpectType = (param: unknown, ...types: string[]): boolean => {
   return types.some(type => Object.prototype.toString.call(param).slice(8, -1).toLowerCase() === type)
@@ -23,16 +23,16 @@ export const has = (data: object, key: string | number): boolean => {
 }
 
 /**
- * 移除\n
- * @param { string } str 将要处理的字符串
- * @return { string } 返回新的字符串
+ * Remove \n
+ * @param { string } str String to process
+ * @return { string } Returns new string
  */
 export const removeEnter = (str: string): string => {
   return [].filter.call(str, s => s !== '\n').join('')
 }
 
 /**
- * 把任何数据类型转成数字
+ * Convert any data type to number
  * @param num 
  */
 export const getNumber = (num: unknown): number => {
@@ -49,8 +49,8 @@ export const getNumber = (num: unknown): number => {
 }
 
 /**
- * 判断颜色是否有效 (透明色 === 无效)
- * @param color 颜色
+ * Check if color is valid (transparent === invalid)
+ * @param color Color
  */
 export const hasBackground = (color: string | undefined | null): boolean => {
   if (typeof color !== 'string') return false
@@ -64,8 +64,8 @@ export const hasBackground = (color: string | undefined | null): boolean => {
 }
 
 /**
- * 通过padding计算
- * @return { object } block 边框信息
+ * Calculate through padding
+ * @return { object } Block border information
  */
 export const computePadding = (
   block: { padding?: string },
@@ -95,10 +95,10 @@ export const computePadding = (
       paddingLeft = padding[2]
       paddingRight = padding[3]
   }
-  // 检查是否单独传入值, 并且不是0
+  // Check if value is passed separately and is not 0
   const res = { paddingTop, paddingBottom, paddingLeft, paddingRight }
   for (let key in res) {
-    // 是否含有这个属性, 并且是数字或字符串
+    // Check if property exists and is number or string
     res[key] = has(block, key) && isExpectType(block[key], 'string', 'number')
       ? getLength(block[key])
       : res[key]
@@ -107,10 +107,10 @@ export const computePadding = (
 }
 
 /**
- * 节流函数
- * @param fn 将要处理的函数
- * @param wait 时间, 单位为毫秒
- * @returns 包装好的节流函数
+ * Throttle function
+ * @param fn Function to process
+ * @param wait Time in milliseconds
+ * @returns Wrapped throttle function
  */
 export const throttle = (fn: Function, wait = 300) => {
   let timeId = null as any
@@ -125,19 +125,19 @@ export const throttle = (fn: Function, wait = 300) => {
 }
 
 /**
- * 通过概率计算出一个奖品索引
- * @param { Array<number | undefined> } rangeArr 概率
- * @returns { number } 中奖索引
+ * Calculate prize index through probability
+ * @param { Array<number | undefined> } rangeArr Probability
+ * @returns { number } Winning index
  */
 export const computeRange = (rangeArr: Array<number | undefined>): number => {
   const ascendingArr: number[] = []
-  // 额外增加 map 来优化 ts 的类型推断
+  // Add map to optimize ts type inference
   const sum = rangeArr.map(num => Number(num)).reduce((prev, curr) => {
-    if (curr > 0) { // 大于0
+    if (curr > 0) { // Greater than 0
       const res = prev + curr
       ascendingArr.push(res)
       return res
-    } else { // 小于等于0或NaN
+    } else { // Less than or equal to 0 or NaN
       ascendingArr.push(NaN)
       return prev
     }
@@ -147,7 +147,7 @@ export const computeRange = (rangeArr: Array<number | undefined>): number => {
 }
 
 /**
- * 根据宽度分割字符串, 来达到换行的效果
+ * Split string by width to achieve line break effect
  * @param text 
  * @param maxWidth 
  * @returns 
@@ -158,7 +158,7 @@ export const splitText = (
   getWidth: (lines: string[]) => number,
   lineClamp: number = Infinity
 ): string[] => {
-  // 如果 lineClamp 设置不正确, 则忽略该属性
+  // If lineClamp is set incorrectly, ignore the property
   if (lineClamp <= 0) lineClamp = Infinity
   let str = ''
   const lines = []
@@ -167,16 +167,16 @@ export const splitText = (
     str += text[i]
     let currWidth = ctx.measureText(str).width
     const maxWidth = getWidth(lines)
-    // 如果正在计算最后一行, 则加上三个小点的宽度
+    // If calculating last line, add width of three dots
     if (lineClamp === lines.length + 1) currWidth += EndWidth
-    // 如果已经没有宽度了, 就没有必要再计算了
+    // If no width left, no need to calculate further
     if (maxWidth < 0) return lines
-    // 如果当前一行的宽度不够了, 则处理下一行
+    // If current line width is not enough, process next line
     if (currWidth > maxWidth) {
       lines.push(str.slice(0, -1))
       str = text[i]
     }
-    // 如果现在是最后一行, 则加上三个小点并跳出
+    // If this is the last line, add three dots and break
     if (lineClamp === lines.length) {
       lines[lines.length - 1] += '...'
       return lines
@@ -187,7 +187,7 @@ export const splitText = (
   return lines
 }
 
-// 获取一个重新排序的数组
+// Get a reordered array
 export const getSortedArrayByIndex = <T>(arr: T[], order: number[]): T[] => {
   const map: { [key: number]: T } = {}, res = []
   for (let i = 0; i < arr.length; i++) {

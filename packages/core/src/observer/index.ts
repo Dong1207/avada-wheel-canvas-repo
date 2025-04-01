@@ -7,15 +7,15 @@ export default class Observer {
   dep: Dep
 
   /**
-   * 观察者构造器
+   * Observer constructor
    * @param value 
    */
   constructor (value: any) {
     // this.value = value
     this.dep = new Dep()
-    // 将响应式对象代理到当前value上面, 并且将当前的enumerable设置为false
+    // Proxy reactive object to current value and set current enumerable to false
     def(value, '__luckyOb__', this)
-    if (Array.isArray(value)) { // 如果是数组, 则重写原型方法
+    if (Array.isArray(value)) { // If array, override prototype methods
       if (hasProto) {
         value['__proto__'] = newArrayProto
       } else {
@@ -35,7 +35,7 @@ export default class Observer {
 }
 
 /**
- * 处理响应式
+ * Handle reactivity
  * @param { Object | Array } data
  */
 export function observe (data: any): Observer | void {
@@ -50,7 +50,7 @@ export function observe (data: any): Observer | void {
 }
 
 /**
- * 重写 setter / getter
+ * Override setter / getter
  * @param {*} data 
  * @param {*} key 
  * @param {*} val 

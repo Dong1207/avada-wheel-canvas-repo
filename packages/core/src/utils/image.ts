@@ -2,9 +2,9 @@ import { ImgType } from '../types/index'
 import { roundRectByArc } from './math'
 
 /**
- * 根据路径获取图片对象
- * @param { string } src 图片路径
- * @returns { Promise<HTMLImageElement> } 图片标签
+ * Get image object from path
+ * @param { string } src Image path
+ * @returns { Promise<HTMLImageElement> } Image element
  */
 export const getImage = (src: string): Promise<ImgType> => {
   return new Promise((resolve, reject) => {
@@ -16,10 +16,10 @@ export const getImage = (src: string): Promise<ImgType> => {
 }
 
 /**
- * 切割圆角
- * @param img 将要裁剪的图片对象
- * @param radius 裁剪的圆角半径
- * @returns 返回一个离屏 canvas 用于渲染
+ * Cut rounded corners
+ * @param img Image object to be cropped
+ * @param radius Corner radius for cropping
+ * @returns Returns an offscreen canvas for rendering
  */
 export const cutRound = (img: ImgType, radius: number): ImgType => {
   const canvas = document.createElement('canvas')
@@ -34,10 +34,10 @@ export const cutRound = (img: ImgType, radius: number): ImgType => {
 }
 
 /**
- * 透明度
- * @param img 将要处理的图片对象
- * @param opacity 透明度
- * @returns 返回一个离屏 canvas 用于渲染
+ * Opacity
+ * @param img Image object to be processed
+ * @param opacity Opacity value
+ * @returns Returns an offscreen canvas for rendering
  */
 export const opacity = (
   img: ImgType,
@@ -48,7 +48,7 @@ export const opacity = (
   const { width, height } = img
   canvas.width = width
   canvas.height = height
-  // 绘制图片, 部分浏览器不支持 filter 属性, 需要处理兼容
+  // Draw image, some browsers don't support filter property, need to handle compatibility
   if (typeof ctx.filter === 'string') {
     ctx.filter = `opacity(${opacity * 100}%)`
     ctx.drawImage(img, 0, 0, width, height)
@@ -67,10 +67,10 @@ export const opacity = (
 }
 
 /**
- * 权重矩阵
- * @param radius 模糊半径
+ * Weight matrix
+ * @param radius Blur radius
  * @param sigma 
- * @returns 返回一个权重和为1的矩阵
+ * @returns Returns a matrix with sum of weights equal to 1
  */
 const getMatrix = (radius: number, sigma?: number): number[] => {
   sigma = sigma || radius / 3
@@ -80,16 +80,16 @@ const getMatrix = (radius: number, sigma?: number): number[] => {
   const denominator = 1 / (2 * Math.PI * sigma_2)
   const matrix = []
   let total = 0
-  // 计算权重矩阵
+  // Calculate weight matrix
   for (let x = -r; x <= r; x++) {
     for (let y = -r; y <= r; y++) {
-      // 套用二维高斯函数得到每个点的权重
+      // Apply 2D Gaussian function to get weight for each point
       const res = denominator * Math.exp(-(x * x + y * y) / sigma2_2)
       matrix.push(res)
       total += res
     }
   }
-  // 让矩阵中所有权重的和等于1
+  // Make sum of all weights in matrix equal to 1
   for (let i = 0; i < matrix.length; i++) {
     matrix[i] /= total
   }
@@ -97,10 +97,10 @@ const getMatrix = (radius: number, sigma?: number): number[] => {
 }
 
 /**
- * 高斯模糊
- * @param img 将要处理的图片对象
- * @param radius 模糊半径
- * @returns 返回一个离屏 canvas 用于渲染
+ * Gaussian blur
+ * @param img Image object to be processed
+ * @param radius Blur radius
+ * @returns Returns an offscreen canvas for rendering
  */
 export const blur = (
   img: ImgType,
@@ -109,7 +109,7 @@ export const blur = (
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')!
   const { width, height } = img
-  // 设置图片宽高
+  // Set image dimensions
   canvas.width = width
   canvas.height = height
   ctx.drawImage(img, 0, 0, width, height)
@@ -121,7 +121,7 @@ export const blur = (
   const cols = r * 2 + 1
   const len = data.length, matrixLen = matrix.length
   for (let i = 0; i < len; i += 4) {
-    // 处理
+    // Process
   }
   console.log(ImageData)
   ctx.putImageData(ImageData, 0, 0)

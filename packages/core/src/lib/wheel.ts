@@ -70,9 +70,9 @@ export default class LuckyWheel extends Lucky {
     this.initData(data)
     this.initWatch()
     this.initComputed()
-    // 创建前回调函数
+    // Create before callback
     config.beforeCreate?.call(this)
-    // 首次初始化
+    // First initialization
     this.init()
   }
 
@@ -121,7 +121,7 @@ export default class LuckyWheel extends Lucky {
    * Initialize computed properties
    */
   private initComputed () {
-    // 默认配置
+    // Default configuration
     this.$computed(this, '_defaultConfig', () => {
       const config = {
         gutter: '0px',
@@ -135,7 +135,7 @@ export default class LuckyWheel extends Lucky {
       }
       return config
     })
-    // 默认样式
+    // Default style
     this.$computed(this, '_defaultStyle', () => {
       const style = {
         fontSize: '18px',
@@ -155,25 +155,25 @@ export default class LuckyWheel extends Lucky {
    * Initialize observers
    */
   private initWatch () {
-    // 重置宽度
+    // Reset width
     this.$watch('width', (newVal: string | number) => {
       this.data.width = newVal
       this.resize()
     })
-    // 重置高度
+    // Reset height
     this.$watch('height', (newVal: string | number) => {
       this.data.height = newVal
       this.resize()
     })
-    // 观察 blocks 变化收集图片
+    // Watch blocks changes to collect images
     this.$watch('blocks', (newData: Array<BlockType>) => {
       this.initImageCache()
     }, { deep: true })
-    // 观察 prizes 变化收集图片
+    // Watch prizes changes to collect images
     this.$watch('prizes', (newData: Array<PrizeType>) => {
       this.initImageCache()
     }, { deep: true })
-    // 观察 buttons 变化收集图片
+    // Watch buttons changes to collect images
     this.$watch('buttons', (newData: Array<ButtonType>) => {
       this.initImageCache()
     }, { deep: true })
@@ -189,13 +189,13 @@ export default class LuckyWheel extends Lucky {
   public async init (): Promise<void> {
     this.initLucky()
     const { config } = this
-    // 初始化前回调函数
+    // Initialize before callback
     config.beforeInit?.call(this)
-    this.draw() // 先画一次, 防止闪烁
-    this.draw() // 再画一次, 拿到正确的按钮轮廓
-    // 异步加载图片
+    this.draw() // Draw once to prevent flicker
+    this.draw() // Draw again to get correct button outline
+    // Async load images
     await this.initImageCache()
-    // 初始化后回调函数
+    // Initialize after callback
     config.afterInit?.call(this)
   }
 
@@ -208,7 +208,7 @@ export default class LuckyWheel extends Lucky {
       }
       ;(<(keyof typeof willUpdateImgs)[]>Object.keys(willUpdateImgs)).forEach(imgName => {
         const willUpdate = willUpdateImgs[imgName]
-        // 循环遍历所有图片
+        // Loop through all images
         const allPromise: Promise<void>[] = []
         willUpdate && willUpdate.forEach((imgs, cellIndex) => {
           imgs && imgs.forEach((imgInfo, imgIndex) => {
@@ -249,12 +249,12 @@ export default class LuckyWheel extends Lucky {
     imgIndex: number,
   ): Promise<void> {
     return new Promise((resolve, reject) => {
-      // 获取图片信息
+      // Get image info
       const cell: BlockType | PrizeType | ButtonType = this[cellName][cellIndex]
       if (!cell || !cell.imgs) return
       const imgInfo = cell.imgs[imgIndex]
       if (!imgInfo) return
-      // 异步加载图片
+      // Async load image
       this.loadImg(imgInfo.src, imgInfo).then(async currImg => {
         if (typeof imgInfo.formatter === 'function') {
           currImg = await Promise.resolve(imgInfo.formatter.call(this, currImg))
@@ -279,7 +279,7 @@ export default class LuckyWheel extends Lucky {
     block.imgs && block.imgs.forEach((imgInfo, imgIndex) => {
       const blockImg = this.ImageCache.get(imgInfo.src)
       if (!blockImg) return
-      // 绘制图片
+      // Draw image
       const [trueWidth, trueHeight] = this.computedWidthAndHeight(blockImg, imgInfo, radius * 2, radius * 2)
       const [xAxis, yAxis] = [this.getOffsetX(trueWidth) + this.getLength(imgInfo.left, radius * 2), this.getLength(imgInfo.top, radius * 2) - radius]
       ctx.save()
@@ -294,39 +294,39 @@ export default class LuckyWheel extends Lucky {
    */
   protected draw (): void {
     const { config, ctx, _defaultConfig, _defaultStyle } = this
-    // 触发绘制前回调
+    // Trigger draw before callback
     config.beforeDraw?.call(this, ctx)
-    // 清空画布
+    // Clear canvas
     ctx.clearRect(-this.Radius, -this.Radius, this.Radius * 2, this.Radius * 2)
-    // 计算 padding 并绘制 blocks 边框
+    // Calculate padding and draw blocks border
     this.prizeRadius = this.blocks.reduce((radius, block, blockIndex) => {
       this.drawBlock(radius, block, blockIndex)
       return radius - this.getLength(block.padding && block.padding.split(' ')[0])
     }, this.Radius)
-    // 计算起始弧度
+    // Calculate starting radian
     this.prizeDeg = 360 / this.prizes.length
     this.prizeAng = getAngle(this.prizeDeg)
     const shortSide = this.prizeRadius * Math.sin(this.prizeAng / 2) * 2
-    // 起始角度调整到正上方, 并且减去半个扇形角度
+    // Adjust starting angle to top and subtract half sector angle
     let start = getAngle(this.rotateDeg - 90 + this.prizeDeg / 2 + _defaultConfig.offsetDegree)
-    // 计算文字横坐标
+    // Calculate text x coordinate
     const getFontX = (font: FontItemType, line: string) => {
       return this.getOffsetX(ctx.measureText(line).width) + this.getLength(font.left, shortSide)
     }
-    // 计算文字纵坐标
+    // Calculate text y coordinate
     const getFontY = (font: FontItemType, height: number, lineIndex: number) => {
-      // 优先使用字体行高, 要么使用默认行高, 其次使用字体大小, 否则使用默认字体大小
+      // Prioritize font line height, then default line height, then font size, otherwise default font size
       const lineHeight = font.lineHeight || _defaultStyle.lineHeight || font.fontSize || _defaultStyle.fontSize
       return this.getLength(font.top, height) + (lineIndex + 1) * this.getLength(lineHeight)
     }
     ctx.save()
-    // 绘制prizes奖品区域
+    // Draw prizes area
     this.prizes.forEach((prize, prizeIndex) => {
-      // 计算当前奖品区域中间坐标点
+      // Calculate current prize area center coordinate point
       let currMiddleDeg = start + prizeIndex * this.prizeAng
-      // 奖品区域可见高度
+      // Prize area visible height
       let prizeHeight = this.prizeRadius - this.maxBtnRadius
-      // 绘制背景
+      // Draw background
       const background = prize.background || _defaultStyle.background
       if (hasBackground(background)) {
         ctx.fillStyle = background
@@ -338,12 +338,12 @@ export default class LuckyWheel extends Lucky {
         )
         ctx.fill()
       }
-      // 计算临时坐标并旋转文字
+      // Calculate temporary coordinates and rotate text
       let x = Math.cos(currMiddleDeg) * this.prizeRadius
       let y = Math.sin(currMiddleDeg) * this.prizeRadius
       ctx.translate(x, y)
       ctx.rotate(currMiddleDeg + getAngle(90))
-      // 绘制图片
+      // Draw image
       prize.imgs && prize.imgs.forEach((imgInfo, imgIndex) => {
         const prizeImg = this.ImageCache.get(imgInfo.src)
         if (!prizeImg) return
@@ -359,7 +359,7 @@ export default class LuckyWheel extends Lucky {
         ]
         this.drawImage(ctx, prizeImg, xAxis, yAxis, trueWidth, trueHeight)
       })
-      // 逐行绘制文字
+      // Draw text line by line
       prize.fonts && prize.fonts.forEach(font => {
         const fontColor = font.fontColor || _defaultStyle.fontColor
         const fontWeight = font.fontWeight || _defaultStyle.fontWeight
@@ -374,11 +374,11 @@ export default class LuckyWheel extends Lucky {
         let lines = [], text = String(font.text)
         if (wordWrap) {
           lines = splitText(ctx, removeEnter(text), (lines) => {
-            // 三角形临边
+            // Triangle adjacent side
             const adjacentSide = this.prizeRadius - getFontY(font, prizeHeight, lines.length)
-            // 三角形短边
+            // Triangle short side
             const shortSide = adjacentSide * Math.tan(this.prizeAng / 2)
-            // 最大宽度
+            // Maximum width
             let maxWidth = shortSide * 2 - this.getLength(_defaultConfig.gutter)
             return this.getLength(lengthLimit, maxWidth)
           }, lineClamp)
@@ -395,15 +395,15 @@ export default class LuckyWheel extends Lucky {
           ctx.restore()
         })
       })
-      // 修正旋转角度和原点坐标
+      // Fix rotation angle and origin coordinates
       ctx.rotate(getAngle(360) - currMiddleDeg - getAngle(90))
       ctx.translate(-x, -y)
     })
     ctx.restore()
-    // 绘制按钮
+    // Draw button
     this.buttons.forEach((btn, btnIndex) => {
       let radius = this.getLength(btn.radius, this.prizeRadius)
-      // 绘制背景颜色
+      // Draw background color
       this.maxBtnRadius = Math.max(this.maxBtnRadius, radius)
       if (hasBackground(btn.background)) {
         ctx.beginPath()
@@ -411,7 +411,7 @@ export default class LuckyWheel extends Lucky {
         ctx.arc(0, 0, radius, 0, Math.PI * 2, false)
         ctx.fill()
       }
-      // 绘制指针
+      // Draw pointer
       if (btn.pointer && hasBackground(btn.background)) {
         ctx.beginPath()
         ctx.fillStyle = btn.background as string
@@ -421,7 +421,7 @@ export default class LuckyWheel extends Lucky {
         ctx.closePath()
         ctx.fill()
       }
-      // 绘制按钮图片
+      // Draw button image
       btn.imgs && btn.imgs.forEach((imgInfo, imgIndex) => {
         const btnImg = this.ImageCache.get(imgInfo.src)
         if (!btnImg) return
@@ -429,7 +429,7 @@ export default class LuckyWheel extends Lucky {
         const [xAxis, yAxis] = [this.getOffsetX(trueWidth) + this.getLength(imgInfo.left, radius), this.getLength(imgInfo.top, radius)]
         this.drawImage(ctx, btnImg, xAxis, yAxis, trueWidth, trueHeight)
       })
-      // 绘制按钮文字
+      // Draw button text
       btn.fonts && btn.fonts.forEach(font => {
         let fontColor = font.fontColor || _defaultStyle.fontColor
         let fontWeight = font.fontWeight || _defaultStyle.fontWeight
@@ -442,7 +442,7 @@ export default class LuckyWheel extends Lucky {
         })
       })
     })
-    // 触发绘制后回调
+    // Trigger draw after callback
     config.afterDraw?.call(this, ctx)
   }
 
@@ -473,15 +473,15 @@ export default class LuckyWheel extends Lucky {
    */
   public play (): void {
     if (this.step !== 0) return
-    // 记录游戏开始时间
+    // Record game start time
     this.startTime = Date.now()
-    // 重置中奖索引
+    // Reset prize index
     this.prizeFlag = void 0
-    // 加速阶段
+    // Acceleration phase
     this.step = 1
-    // 触发回调
+    // Trigger callback
     this.config.afterStart?.()
-    // 开始游戏
+    // Start game
     this.run()
   }
 
@@ -491,12 +491,12 @@ export default class LuckyWheel extends Lucky {
    */
   public stop (index?: number): void {
     if (this.step === 0 || this.step === 3) return
-    // 如果没有传递中奖索引, 则通过range属性计算一个
+    // If no prize index passed, calculate one using range property
     if (!index && index !== 0) {
       const rangeArr = this.prizes.map(item => item.range)
       index = computeRange(rangeArr)
     }
-    // 如果index是负数则停止游戏, 反之则传递中奖索引
+    // If index is negative then stop game, otherwise pass prize index
     if (index < 0) {
       this.step = 0
       this.prizeFlag = -1
@@ -513,47 +513,47 @@ export default class LuckyWheel extends Lucky {
   private run (num: number = 0): void {
     const { rAF, step, prizeFlag, _defaultConfig } = this
     const { accelerationTime, decelerationTime, speed } = _defaultConfig
-    // 游戏结束
+    // Game over
     if (step === 0) {
       this.endCallback?.(this.prizes.find((prize, index) => index === prizeFlag) || {})
       return
     }
-    // 如果等于 -1 就直接停止游戏
+    // If equals -1 then stop game directly
     if (prizeFlag === -1) return
-    // 计算结束位置
+    // Calculate end position
     if (step === 3 && !this.endDeg) this.carveOnGunwaleOfAMovingBoat()
-    // 计算时间间隔
+    // Calculate time interval
     const startInterval = Date.now() - this.startTime
     const endInterval = Date.now() - this.endTime
     let rotateDeg = this.rotateDeg
     // 
-    if (step === 1 || startInterval < accelerationTime) { // 加速阶段
-      // 记录帧率
+    if (step === 1 || startInterval < accelerationTime) { // Acceleration phase
+      // Record frame rate
       this.FPS = startInterval / num
       const currSpeed = quad.easeIn(startInterval, 0, speed, accelerationTime)
-      // 加速到峰值后, 进入匀速阶段
+      // After accelerating to peak speed, enter constant speed phase
       if (currSpeed === speed) {
         this.step = 2
       }
       rotateDeg = rotateDeg + currSpeed % 360
-    } else if (step === 2) { // 匀速阶段
-      // 速度保持不变
+    } else if (step === 2) { // Constant speed phase
+      // Speed remains unchanged
       rotateDeg = rotateDeg + speed % 360
-      // 如果 prizeFlag 有值, 则进入减速阶段
+      // If prizeFlag has value, enter deceleration phase
       if (prizeFlag !== void 0 && prizeFlag >= 0) {
         this.step = 3
-        // 清空上一次的位置信息
+        // Clear previous position info
         this.stopDeg = 0
         this.endDeg = 0
       }
-    } else if (step === 3) { // 减速阶段
-      // 开始缓慢停止
+    } else if (step === 3) { // Deceleration phase
+      // Start slowing down
       rotateDeg = quad.easeOut(endInterval, this.stopDeg, this.endDeg, decelerationTime)
       if (endInterval >= decelerationTime) {
         this.step = 0
       }
     } else {
-      // 出现异常
+      // Exception occurred
       this.stop(-1)
     }
     this.rotateDeg = rotateDeg

@@ -5,25 +5,25 @@ export default class Dep {
   private subs: Array<Watcher>
 
   /**
-   * 订阅中心构造器
+   * Subscription center constructor
    */
   constructor () {
     this.subs = []
   }
 
   /**
-   * 收集依赖
+   * Collect dependencies
    * @param {*} sub 
    */
   public addSub (sub: Watcher) {
-    // 此处临时使用includes防重复添加
+    // Temporarily use includes to prevent duplicate additions
     if (!this.subs.includes(sub)) {
       this.subs.push(sub)
     }
   }
 
   /**
-   * 派发更新
+   * Dispatch updates
    */
   public notify () {
     this.subs.forEach(sub => {

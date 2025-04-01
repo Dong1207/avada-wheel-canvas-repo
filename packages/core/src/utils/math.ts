@@ -1,27 +1,27 @@
 /**
- * 转换为运算角度
- * @param { number } deg 数学角度
- * @return { number } 运算角度
+ * Convert to calculation angle
+ * @param { number } deg Mathematical angle
+ * @return { number } Calculation angle
  */
 export const getAngle = (deg: number): number => {
   return Math.PI / 180 * deg
 }
 
 /**
- * 根据角度计算圆上的点
- * @param { number } deg 运算角度
- * @param { number } r 半径
- * @return { Array<number> } 坐标[x, y]
+ * Calculate point on circle based on angle
+ * @param { number } deg Calculation angle
+ * @param { number } r Radius
+ * @return { Array<number> } Coordinates [x, y]
  */
 export const getArcPointerByDeg = (deg: number, r: number): [number, number] => {
   return [+(Math.cos(deg) * r).toFixed(8), +(Math.sin(deg) * r).toFixed(8)]
 }
 
 /**
- * 根据点计算切线方程
- * @param { number } x 横坐标
- * @param { number } y 纵坐标
- * @return { Array<number> } [斜率, 常数]
+ * Calculate tangent equation based on point
+ * @param { number } x X coordinate
+ * @param { number } y Y coordinate
+ * @return { Array<number> } [Slope, Constant]
  */
 export const getTangentByPointer = (x: number, y: number): Array<number> => {
   let k = - x / y
@@ -29,7 +29,7 @@ export const getTangentByPointer = (x: number, y: number): Array<number> => {
   return [k, b]
 }
 
-// 使用 arc 绘制扇形
+// Draw fan shape using arc
 export const fanShapedByArc = (
   ctx: CanvasRenderingContext2D,
   minRadius: number,
@@ -46,7 +46,7 @@ export const fanShapedByArc = (
   let minStart = start + minGutter
   let minEnd = end - minGutter
   ctx.arc(0, 0, maxRadius, maxStart, maxEnd, false)
-  // 如果 getter 比按钮短就绘制圆弧, 反之计算新的坐标点
+  // If gutter is shorter than button, draw arc, otherwise calculate new coordinate points
   // if (minEnd > minStart) {
   //   ctx.arc(0, 0, minRadius, minEnd, minStart, true)
   // } else {
@@ -60,7 +60,7 @@ export const fanShapedByArc = (
   ctx.closePath()
 }
 
-// 使用 arc 绘制圆角矩形
+// Draw rounded rectangle using arc
 export const roundRectByArc = (
   ctx: CanvasRenderingContext2D,
   ...[x, y, w, h, r]: number[]
@@ -82,7 +82,7 @@ export const roundRectByArc = (
 }
 
 /**
- * 创建线性渐变色
+ * Create linear gradient
  */
 export const getLinearGradient = (
   ctx: CanvasRenderingContext2D,
@@ -93,13 +93,13 @@ export const getLinearGradient = (
   background: string
 ) => {
   const context = (/linear-gradient\((.+)\)/.exec(background) as Array<any>)[1]
-    .split(',') // 根据逗号分割
-    .map((text: string) => text.trim()) // 去除两边空格
+    .split(',') // Split by comma
+    .map((text: string) => text.trim()) // Remove spaces on both sides
   let deg = context.shift(), direction: [number, number, number, number] = [0, 0, 0, 0]
-  // 通过起始点和角度计算渐变终点的坐标点, 这里感谢泽宇大神提醒我使用勾股定理....
+  // Calculate gradient end point coordinates using starting point and angle, thanks to ZeYu for reminding me to use Pythagorean theorem
   if (deg.includes('deg')) {
     deg = deg.slice(0, -3) % 360
-    // 根据4个象限定义起点坐标, 根据45度划分8个区域计算终点坐标
+    // Define starting point coordinates based on 4 quadrants, calculate end point coordinates based on 8 regions divided by 45 degrees
     const getLenOfTanDeg = (deg: number) => Math.tan(deg / 180 * Math.PI)
     if (deg >= 0 && deg < 45) direction = [x, y + h, x + w, y + h - w * getLenOfTanDeg(deg - 0)]
     else if (deg >= 45 && deg < 90) direction = [x, y + h, (x + w) - h * getLenOfTanDeg(deg - 45), y]
@@ -110,14 +110,14 @@ export const getLinearGradient = (
     else if (deg >= 270 && deg < 315) direction = [x, y, x + h * getLenOfTanDeg(deg - 270), y + h]
     else if (deg >= 315 && deg < 360) direction = [x, y, x + w, y + h - w * getLenOfTanDeg(deg - 315)]
   }
-  // 创建四个简单的方向坐标
+  // Create four simple direction coordinates
   else if (deg.includes('top')) direction = [x, y + h, x, y]
   else if (deg.includes('bottom')) direction = [x, y, x, y + h]
   else if (deg.includes('left')) direction = [x + w, y, x, y]
   else if (deg.includes('right')) direction = [x, y, x + w, y]
-  // 创建线性渐变必须使用整数坐标
+  // Create linear gradient must use integer coordinates
   const gradient = ctx.createLinearGradient(...(direction.map(n => n >> 0) as typeof direction))
-  // 这里后期重构, 先用any代替
+  // TODO: Refactor later, temporarily use any
   return context.reduce((gradient: any, item: any, index: any) => {
     const info = item.split(' ')
     if (info.length === 1) gradient.addColorStop(index, info[0])

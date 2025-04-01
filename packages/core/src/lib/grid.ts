@@ -75,9 +75,9 @@ export default class LuckyGrid extends Lucky {
   private ImageCache = new Map()
 
   /**
-   * 九宫格构造器
-   * @param config 配置项
-   * @param data 抽奖数据
+   * Grid lottery constructor
+   * @param config Configuration
+   * @param data Lottery data
    */
   constructor (config: UserConfigType, data: LuckyGridConfig) {
     super(config, {
@@ -116,7 +116,7 @@ export default class LuckyGrid extends Lucky {
   }
 
   /**
-   * 初始化数据
+   * Initialize data
    * @param data
    */
   private initData (data: LuckyGridConfig): void {
@@ -137,7 +137,7 @@ export default class LuckyGrid extends Lucky {
   }
 
   /**
-   * 初始化属性计算
+   * Initialize computed properties
    */
   private initComputed (): void {
     // Default configuration
@@ -179,7 +179,7 @@ export default class LuckyGrid extends Lucky {
   }
 
   /**
-   * 初始化观察者
+   * Initialize observers
    */
   private initWatch (): void {
     // Reset width
@@ -214,7 +214,7 @@ export default class LuckyGrid extends Lucky {
   }
 
   /**
-   * 初始化 canvas 抽奖
+   * Initialize canvas lottery
    */
   public async init (): Promise<void> {
     this.initLucky()
@@ -256,8 +256,8 @@ export default class LuckyGrid extends Lucky {
   }
 
   /**
-   * canvas点击事件
-   * @param e 事件参数
+   * Canvas click event
+   * @param e Event parameters
    */
   protected handleClick (e: MouseEvent): void {
     const { ctx } = this
@@ -281,11 +281,11 @@ export default class LuckyGrid extends Lucky {
   }
 
   /**
-   * 根据索引单独加载指定图片并缓存
-   * @param cellName 模块名称
-   * @param cellIndex 模块索引
-   * @param imgName 模块对应的图片缓存
-   * @param imgIndex 图片索引
+   * Load and cache specified image by index
+   * @param cellName Module name
+   * @param cellIndex Module index
+   * @param imgName Module image cache
+   * @param imgIndex Image index
    */
   private async loadAndCacheImg (
     cellName: 'blocks' | 'prizes' | 'buttons',
@@ -326,7 +326,7 @@ export default class LuckyGrid extends Lucky {
   }
 
   /**
-   * 绘制九宫格抽奖
+   * Draw grid lottery
    */
   protected draw (): void {
     const { config, ctx, _defaultConfig, _defaultStyle, _activeStyle } = this
@@ -483,7 +483,7 @@ export default class LuckyGrid extends Lucky {
   }
 
   /**
-   * 处理背景色
+   * Handle background color
    * @param x
    * @param y
    * @param width
@@ -507,7 +507,7 @@ export default class LuckyGrid extends Lucky {
   }
 
   /**
-   * 刻舟求剑
+   * Carve on gunwale of moving boat
    */
   private carveOnGunwaleOfAMovingBoat (): void {
     const { _defaultConfig, prizeFlag, currIndex } = this
@@ -528,7 +528,7 @@ export default class LuckyGrid extends Lucky {
   }
 
   /**
-   * 对外暴露: 开始抽奖方法
+   * Exposed: Start lottery method
    */
   public play (): void {
     if (this.step !== 0) return
@@ -545,8 +545,8 @@ export default class LuckyGrid extends Lucky {
   }
 
   /**
-   * 对外暴露: 缓慢停止方法
-   * @param index 中奖索引
+   * Exposed: Slow stop method
+   * @param index Prize index
    */
   public stop (index?: number): void {
     if (this.step === 0 || this.step === 3) return
@@ -566,8 +566,8 @@ export default class LuckyGrid extends Lucky {
   }
 
   /**
-   * 实际开始执行方法
-   * @param num 记录帧动画执行多少次
+   * Actually start execution method
+   * @param num Record how many times frame animation executed
    */
   private run (num: number = 0): void {
     const { rAF, step, prizes, prizeFlag, _defaultConfig } = this
@@ -621,9 +621,9 @@ export default class LuckyGrid extends Lucky {
   }
 
   /**
-   * 计算奖品格子的几何属性
-   * @param { array } [...矩阵坐标, col, row]
-   * @return { array } [...真实坐标, width, height]
+   * Calculate prize cell geometric properties
+   * @param { array } [...matrix coordinates, col, row]
+   * @return { array } [...real coordinates, width, height]
    */
   private getGeometricProperty ([x, y, col = 1, row = 1]: number[]) {
     const { cellWidth, cellHeight } = this
@@ -640,7 +640,7 @@ export default class LuckyGrid extends Lucky {
   }
 
   /**
-   * 换算渲染坐标
+   * Convert render coordinates
    * @param x
    * @param y
    */

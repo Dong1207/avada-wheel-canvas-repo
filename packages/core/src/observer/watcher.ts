@@ -19,7 +19,7 @@ export default class Watcher {
   value: any
 
   /**
-   * 观察者构造器
+   * Observer constructor
    * @param {*} $lucky 
    * @param {*} expr 
    * @param {*} cb 
@@ -39,12 +39,12 @@ export default class Watcher {
   }
 
   /**
-   * 根据表达式获取新值
+   * Get new value based on expression
    */
   get () {
     Dep.target = this
     const value = this.getter.call(this.$lucky, this.$lucky)
-    // 处理深度监听
+    // Handle deep watching
     if (this.deep) {
       traverse(value)
     }
@@ -53,15 +53,15 @@ export default class Watcher {
   }
 
   /**
-   * 触发 watcher 更新
+   * Trigger watcher update
    */
   update () {
-    // get获取新值
+    // Get new value
     const newVal = this.get()
-    // 读取之前存储的旧值
+    // Read previously stored old value
     const oldVal = this.value
     this.value = newVal
-    // 触发 watch 回调
+    // Trigger watch callback
     this.cb.call(this.$lucky, newVal, oldVal)
   }
 }

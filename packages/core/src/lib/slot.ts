@@ -220,7 +220,7 @@ export default class SlotMachine extends Lucky {
       }
       ;(<(keyof typeof willUpdateImgs)[]>Object.keys(willUpdateImgs)).forEach(imgName => {
         const willUpdate = willUpdateImgs[imgName]
-        // 循环遍历所有图片
+        // Loop through all images
         const allPromise: Promise<void>[] = []
         willUpdate && willUpdate.forEach((imgs, cellIndex) => {
           imgs && imgs.forEach((imgInfo, imgIndex) => {
@@ -253,7 +253,7 @@ export default class SlotMachine extends Lucky {
       if (!cell || !cell.imgs) return
       const imgInfo = cell.imgs[imgIndex]
       if (!imgInfo) return
-      // 异步加载图片
+      // Async load image
       this.loadImg(imgInfo.src, imgInfo).then(async currImg => {
         if (typeof imgInfo.formatter === 'function') {
           currImg = await Promise.resolve(imgInfo.formatter.call(this, currImg))
@@ -273,37 +273,37 @@ export default class SlotMachine extends Lucky {
   protected drawOffscreenCanvas (): void {
     const { _defaultConfig, _defaultStyle } = this
     const { w, h } = this.drawBlocks()!
-    // 计算单一奖品格子的宽度和高度
+    // Calculate single prize cell width and height
     const prizesLen = this.prizes.length
     const { cellWidth, cellHeight, widthAndSpacing, heightAndSpacing } = this.displacementWidthOrHeight()
     this.defaultOrder = new Array(prizesLen).fill(void 0).map((v, i) => i)
     let maxOrderLen = 0, maxOffWidth = 0, maxOffHeight = 0
     this.slots.forEach((slot, slotIndex) => {
-      // 初始化 scroll 的值
+      // Initialize scroll value
       if (this.scroll[slotIndex] === void 0) this.scroll[slotIndex] = 0
-      // 如果没有order属性, 就填充prizes
+      // If no order attribute, fill prizes
       const order = slot.order || this.defaultOrder
-      // 计算最大值
+      // Calculate maximum value
       const currLen = order.length
       maxOrderLen = Math.max(maxOrderLen, currLen)
       maxOffWidth = Math.max(maxOffWidth, w + widthAndSpacing * currLen)
       maxOffHeight = Math.max(maxOffHeight, h + heightAndSpacing * currLen)
     })
-    // 创建一个离屏Canvas来存储画布的内容
+    // Create an offscreen Canvas to store the content of the canvas
     const offscreenCanvas = this.getOffscreenCanvas(maxOffWidth, maxOffHeight)
     if (!offscreenCanvas) {
       throw new Error('Failed to create offscreen canvas')
     }
     const { _offscreenCanvas, _ctx } = offscreenCanvas
     this._offscreenCanvas = _offscreenCanvas
-    // 绘制插槽
+    // Draw slot
     this.slots.forEach((slot, slotIndex) => {
       const cellX = cellWidth * slotIndex
       const cellY = cellHeight * slotIndex
       let lengthOfCopy = 0
-      // 绘制奖品
+      // Draw prizes
       const newPrizes = getSortedArrayByIndex(this.prizes, slot.order||this.defaultOrder)
-      // 如果没有奖品则打断逻辑
+      // If no prizes, break logic
       if (!newPrizes.length) return
       newPrizes.forEach((cell, cellIndex) => {
         if (!cell) return
@@ -314,7 +314,7 @@ export default class SlotMachine extends Lucky {
           [prizesX, cellY, widthAndSpacing]
         )
         lengthOfCopy += spacing
-        // 绘制背景
+        // Draw background
         const background = cell.background || _defaultStyle.background
         if (hasBackground(background)) {
           const borderRadius = this.getLength(has(cell, 'borderRadius') ? cell.borderRadius : _defaultStyle.borderRadius)
@@ -322,7 +322,7 @@ export default class SlotMachine extends Lucky {
           _ctx.fillStyle = background
           _ctx.fill()
         }
-        // 绘制图片
+        // Draw image
         cell.imgs && cell.imgs.forEach((imgInfo, imgIndex) => {
           const cellImg = this.ImageCache.get(imgInfo.src)
           if (!cellImg) return
@@ -333,15 +333,15 @@ export default class SlotMachine extends Lucky {
           ]
           this.drawImage(_ctx, cellImg, xAxis, yAxis, trueWidth, trueHeight)
         })
-        // 绘制文字
+        // Draw text
         cell.fonts && cell.fonts.forEach(font => {
-          // 字体样式
+          // Font style
           const style = font.fontStyle || _defaultStyle.fontStyle
-          // 字体加粗
+          // Font bold
           const fontWeight = font.fontWeight || _defaultStyle.fontWeight
-          // 字体大小
+          // Font size
           const size = this.getLength(font.fontSize || _defaultStyle.fontSize)
-          // 字体行高
+          // Font line height
           const lineHeight = font.lineHeight || _defaultStyle.lineHeight || font.fontSize || _defaultStyle.fontSize
           const wordWrap = has(font, 'wordWrap') ? font.wordWrap : _defaultStyle.wordWrap
           const lengthLimit = font.lengthLimit || _defaultStyle.lengthLimit
@@ -349,9 +349,9 @@ export default class SlotMachine extends Lucky {
           _ctx.font = `${fontWeight} ${size >> 0}px ${style}`
           _ctx.fillStyle = font.fontColor || _defaultStyle.fontColor
           let lines = [], text = String(font.text)
-          // 计算文字换行
+          // Calculate text line wrapping
           if (wordWrap) {
-            // 最大宽度
+            // Maximum width
             let maxWidth = this.getLength(lengthLimit, cellWidth)
             lines = splitText(_ctx, removeEnter(text), () => maxWidth, lineClamp)
           } else {
@@ -388,22 +388,22 @@ export default class SlotMachine extends Lucky {
    */
   protected drawBlocks (): SlotMachine['prizeArea'] {
     const { config, ctx, _defaultConfig, _defaultStyle } = this
-    // 绘制背景区域, 并计算奖品区域
+    // Draw background area and calculate prize area
     return this.prizeArea = this.blocks.reduce(({x, y, w, h}, block, blockIndex) => {
       const [paddingTop, paddingBottom, paddingLeft, paddingRight] = computePadding(block, this.getLength.bind(this))
       const r = block.borderRadius ? this.getLength(block.borderRadius) : 0
-      // 绘制边框
+      // Draw border
       const background = block.background || _defaultStyle.background
       if (hasBackground(background)) {
         roundRectByArc(ctx, x, y, w, h, r)
         ctx.fillStyle = background
         ctx.fill()
       }
-      // 绘制图片
+      // Draw image
       block.imgs && block.imgs.forEach((imgInfo, imgIndex) => {
         const blockImg = this.ImageCache.get(imgInfo.src)
         if (!blockImg) return
-        // 绘制图片
+        // Draw image
         const [trueWidth, trueHeight] = this.computedWidthAndHeight(blockImg, imgInfo, w, h)
         const [xAxis, yAxis] = [this.getOffsetX(trueWidth, w) + this.getLength(imgInfo.left, w), this.getLength(imgInfo.top, h)]
         this.drawImage(ctx, blockImg, x + xAxis, y + yAxis, trueWidth, trueHeight)
@@ -422,23 +422,23 @@ export default class SlotMachine extends Lucky {
    */
   protected draw (): void {
     const { config, ctx, _defaultConfig, _defaultStyle } = this
-    // 触发绘制前回调
+    // Trigger draw before callback
     config.beforeDraw?.call(this, ctx)
-    // 清空画布
+    // Clear canvas
     ctx.clearRect(0, 0, this.boxWidth, this.boxHeight)
-    // 绘制背景
+    // Draw background
     const { x, y, w, h } = this.drawBlocks()!
-    // 绘制插槽
+    // Draw slot
     if (!this._offscreenCanvas) return
     const { cellWidth, cellHeight, cellAndSpacing, widthAndSpacing, heightAndSpacing } = this
     this.slots.forEach((slot, slotIndex) => {
       const order = slot.order || this.defaultOrder
-      // 绘制临界点
+      // Draw critical point
       const _p = cellAndSpacing * order.length
-      // 调整奖品垂直居中
+      // Adjust prize vertical center
       const start = this.displacement(-(h - heightAndSpacing) / 2, -(w - widthAndSpacing) / 2)
       let scroll = this.scroll[slotIndex] + start
-      // scroll 会无限累加 1 / -1
+      // scroll will infinitely accumulate 1 / -1
       if (scroll < 0) {
         scroll = scroll % _p + _p
       }
@@ -462,7 +462,7 @@ export default class SlotMachine extends Lucky {
    */
   private carveOnGunwaleOfAMovingBoat (): void {
     const { _defaultConfig, prizeFlag, cellAndSpacing } = this
-    // 记录开始停止的时间戳
+    // Record start and stop time stamps
     this.endTime = Date.now()
     this.slots.forEach((slot, slotIndex) => {
       const order = slot.order || this.defaultOrder
@@ -489,15 +489,15 @@ export default class SlotMachine extends Lucky {
    */
    public play (): void {
     if (this.step !== 0) return
-    // 记录开始游戏的时间
+    // Record game start time
     this.startTime = Date.now()
-    // 清空中奖索引
+    // Reset prize index
     this.prizeFlag = void 0
-    // 开始加速
+    // Start acceleration
     this.step = 1
-    // 触发回调
+    // Trigger callback
     this.config.afterStart?.()
-    // 开始渲染
+    // Start rendering
     this.run()
   }
 
@@ -507,7 +507,7 @@ export default class SlotMachine extends Lucky {
    */
   public stop (index: number | number[]): void {
     if (this.step === 0 || this.step === 3) return
-    // 设置中奖索引
+    // Set prize index
     if (typeof index === 'number') {
       this.prizeFlag = new Array(this.slots.length).fill(index)
     } else if (isExpectType(index, 'array')) {
@@ -515,19 +515,19 @@ export default class SlotMachine extends Lucky {
         this.prizeFlag = index
       } else {
         this.stop(-1)
-        return console.error(`stop([${index}]) 参数长度的不正确`)
+        return console.error(`stop([${index}]) parameter length is incorrect`)
       }
     } else {
       this.stop(-1)
-      return console.error(`stop() 无法识别的参数类型 ${typeof index}`)
+      return console.error(`stop() cannot recognize parameter type ${typeof index}`)
     }
-    // 如果包含负数则停止游戏, 反之则继续游戏
+    // If it contains negative values, stop the game, otherwise continue the game
     if (this.prizeFlag?.includes(-1)) {
       this.prizeFlag = []
-      // 停止游戏
+      // Stop the game
       this.step = 0
     } else {
-      // 进入匀速
+      // Enter constant speed
       this.step = 2
     }
   }

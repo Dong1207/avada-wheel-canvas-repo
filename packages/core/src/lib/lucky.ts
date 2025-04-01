@@ -93,7 +93,7 @@ export default class Lucky {
   protected initLucky () {
     this.resize()
     if (!this.boxWidth || !this.boxHeight) {
-      return console.error('无法获取到宽度或高度')
+      return console.error('Unable to get width or height')
     }
   }
 
@@ -128,7 +128,7 @@ export default class Lucky {
     } else if (window) {
       window['dpr'] = config.dpr = window.devicePixelRatio || 1
     } else if (!config.dpr) {
-      console.error(config, '未传入 dpr 可能会导致绘制异常')
+      console.error(config, 'No dpr provided may cause rendering issues')
     }
   }
 
@@ -217,12 +217,12 @@ export default class Lucky {
     resolveName = '$resolve'
   ): Promise<ImgType> {
     return new Promise((resolve, reject) => {
-      if (!src) reject(`=> '${info.src}' 不能为空或不合法`)
+      if (!src) reject(`=> '${info.src}' cannot be empty or invalid`)
       if (this.config.flag === 'WEB') {
         let imgObj = new Image()
         imgObj['crossorigin'] = 'anonymous'
         imgObj.onload = () => resolve(imgObj)
-        imgObj.onerror = () => reject(`=> '${info.src}' 图片加载失败`)
+        imgObj.onerror = () => reject(`=> '${info.src}' image load failed`)
         imgObj.src = src
       } else {
         // Other platforms expose externally for self-handling
@@ -337,10 +337,10 @@ export default class Lucky {
   }
 
   /**
-   * 获取长度
-   * @param length 将要转换的长度
-   * @param maxLength 最大长度
-   * @return 返回长度
+   * Get length
+   * @param length Length to convert
+   * @param maxLength Maximum length
+   * @return Length
    */
   protected getLength (length: string | number | undefined, maxLength?: number): number {
     if (isExpectType(length, 'number')) return length as number
@@ -349,7 +349,7 @@ export default class Lucky {
   }
 
   /**
-   * 获取相对(居中)X坐标
+   * Get relative (centered) X coordinate
    * @param width
    * @param col
    */
@@ -367,7 +367,7 @@ export default class Lucky {
       } else {
         this['_offscreenCanvas'] = this.config['offscreenCanvas']
       }
-      if (!this['_offscreenCanvas']) return console.error('离屏 Canvas 无法渲染!')
+      if (!this['_offscreenCanvas']) return console.error('Offscreen Canvas cannot render!')
     }
     const dpr = this.config.dpr
     const _offscreenCanvas = this['_offscreenCanvas'] as HTMLCanvasElement
@@ -381,10 +381,10 @@ export default class Lucky {
   }
 
   /**
-   * 添加一个新的响应式数据 (临时)
-   * @param data 数据
-   * @param key 属性
-   * @param value 新值
+   * Add a new reactive data (temporary)
+   * @param data Data
+   * @param key Property
+   * @param value New value
    */
   public $set (data: object, key: string | number, value: any) {
     if (!data || typeof data !== 'object') return
@@ -392,10 +392,10 @@ export default class Lucky {
   }
 
   /**
-   * 添加一个属性计算 (临时)
-   * @param data 源数据
-   * @param key 属性名
-   * @param callback 回调函数
+   * Add a computed property (temporary)
+   * @param data Source data
+   * @param key Property name
+   * @param callback Callback function
    */
   protected $computed (data: object, key: string, callback: Function) {
     Object.defineProperty(data, key, {
@@ -406,11 +406,11 @@ export default class Lucky {
   }
 
   /**
-   * 添加一个观察者 create user watcher
-   * @param expr 表达式
-   * @param handler 回调函数
-   * @param watchOpt 配置参数
-   * @return 卸载当前观察者的函数 (暂未返回)
+   * Add an observer create user watcher
+   * @param expr Expression
+   * @param handler Callback function
+   * @param watchOpt Configuration parameters
+   * @return Function to uninstall current observer (not yet returned)
    */
   protected $watch (
     expr: string | Function,

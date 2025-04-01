@@ -1,8 +1,8 @@
 /**
- * 由于部分低版本下的某些 app 可能会缺少某些原型方法, 这里增加兼容
+ * Add compatibility for some low-version apps that may be missing certain prototype methods
  */
 
-// ie11 不兼容 includes 方法
+// ie11 doesn't support includes method
 if (!Array.prototype.includes) {
   Object.defineProperty(Array.prototype, 'includes', {
     value: function(valueToFind, fromIndex) {
@@ -54,7 +54,7 @@ if (!Array.prototype.includes) {
   });
 }
 
-// vivo x7 下网易云游戏 app 缺少 includes 方法
+// NetEase Cloud Game app on vivo x7 is missing includes method
 if (!String.prototype.includes) {
   String.prototype.includes = function(search, start) {
     'use strict';
@@ -69,7 +69,7 @@ if (!String.prototype.includes) {
   };
 }
 
-// vivo x7 下网易云游戏 app 缺少 find 方法
+// NetEase Cloud Game app on vivo x7 is missing find method
 if (!Array.prototype.find) {
   Object.defineProperty(Array.prototype, 'find', {
     value: function(predicate) {
