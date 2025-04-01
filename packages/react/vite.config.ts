@@ -30,6 +30,7 @@ export default defineConfig({
     sourcemap: true
   },
   server: {
-    port: 3001
+    port: 3001,
+    open: '/example/react18.0.html'
   }
 }) 
