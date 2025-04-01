@@ -1,18 +1,16 @@
 {
   "name": "avada-wheel-canvas-react",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A React component library for lucky draw games",
   "type": "module",
-  "main": "./dist/index.umd.js",
-  "module": "./dist/index.esm.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.esm.js",
-      "require": "./dist/index.umd.js",
+      "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
-    },
-    "./dist/style.css": "./dist/style.css"
+    }
   },
   "files": [
     "dist"
