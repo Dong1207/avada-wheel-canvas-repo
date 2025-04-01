@@ -1,56 +1,91 @@
-import LuckyWheel  from '../components/LuckyWheel.js'
-import React from 'react'
+import LuckyWheel from "../components/LuckyWheel.js";
+import React from "react";
 
 export default class Wheel extends React.Component {
-  constructor () {
-    super()
-    this.myLucky = React.createRef()
+  constructor() {
+    super();
+    this.myLucky = React.createRef();
     this.state = {
-      currPrize: '哈哈哈',
-      blocks: [
-      ],
+      currPrize: "哈哈哈",
+      blocks: [],
       prizes: [
-        { title: '1元红包', background: '#f9e3bb', fonts: [{ text: '1元红包', top: '18%' }] },
-        { title: '100元红包', background: '#f8d384', fonts: [{ text: '100元红包', top: '18%' }] },
-        { title: '0.5元红包', background: '#f9e3bb', fonts: [{ text: '0.5元红包', top: '18%' }] },
-        { title: '2元红包', background: '#f8d384', fonts: [{ text: '2元红包', top: '18%' }] },
-        { title: '10元红包', background: '#f9e3bb', fonts: [{ text: '10元红包', top: '18%' }] },
-        { title: '50元红包', background: '#f8d384', fonts: [{ text: '50元红包', top: '18%' }] },
+        {
+          name: "Free gift",
+          background: "#FF8080",
+          fonts: [{text: "Free gift", top: "30%", fontSize: "14px"}],
+        },
+        {
+          name: "35% off",
+          background: "#FFB2B2",
+          fonts: [{text: "35% off", top: "30%", fontSize: "14px"}],
+        },
+        {
+          name: "Chúc may mắn",
+          background: "#CC6666",
+          fonts: [{text: "Chúc may mắn", top: "30%", fontSize: "14px"}],
+        },
+        {
+          name: "IPhone 16 Pro max",
+          background: "#FFE0E0",
+          fonts: [{text: "IPhone 16 Pro max", top: "30%", fontSize: "14px"}],
+        },
+        {
+          name: "Thank You",
+          background: "#FF8080",
+          fonts: [{text: "Thank You", top: "30%", fontSize: "14px"}],
+        },
+        {
+          name: "Red Envelope",
+          background: "#FFB2B2",
+          fonts: [{text: "Red Envelope", top: "30%", fontSize: "14px"}],
+        },
+        {
+          name: "Extra 3 Draws",
+          background: "#CC6666",
+          fonts: [{text: "Extra 3 Draws", top: "30%", fontSize: "14px"}],
+        },
+        {
+          name: "Gift",
+          background: "#FFE0E0",
+          fonts: [{text: "Gift", top: "30%", fontSize: "14px"}],
+        },
       ],
       buttons: [
         {
-          radius: '35px', background: '#ffdea0',
-          fonts: [{ text: '开始\n抽奖', fontSize: '18px', top: -18 }]
-        }
+          radius: "35px",
+          background: "#ffdea0",
+          fonts: [{text: "开始\n抽奖", fontSize: "18px", top: -18}],
+        },
       ],
-    }
+    };
   }
-  render () {
-    return <div>
-      当前中奖: {this.state.currPrize}
-      <LuckyWheel
-        ref={this.myLucky}
-        width="300px"
-        height="300px"
-        blocks={this.state.blocks}
-        prizes={this.state.prizes}
-        buttons={this.state.buttons}
-        defaultStyle={this.state.defaultStyle}
-        onStart={() => {
-          console.log(this.state.currPrize)
-          this.myLucky.current.play()
-          setTimeout(() => {
-            const index = Math.random() * 6 >> 0
-            this.myLucky.current.stop(index)
-          }, 2500)
-        }}
-        onEnd={prize => {
-          this.setState({
-            currPrize: prize.title
-          })
-        }}
-      ></LuckyWheel>
-    </div>
+  render() {
+    return (
+      <div>
+        当前中奖: {this.state.currPrize}
+        <LuckyWheel
+          ref={this.myLucky}
+          width="300px"
+          height="300px"
+          blocks={this.state.blocks}
+          prizes={this.state.prizes}
+          buttons={this.state.buttons}
+          defaultStyle={this.state.defaultStyle}
+          onStart={() => {
+            console.log(this.state.currPrize);
+            this.myLucky.current.play();
+            setTimeout(() => {
+              const index = (Math.random() * 6) >> 0;
+              this.myLucky.current.stop(index);
+            }, 2500);
+          }}
+          onEnd={(prize) => {
+            this.setState({
+              currPrize: prize.title,
+            });
+          }}
+        ></LuckyWheel>
+      </div>
+    );
   }
 }
- 

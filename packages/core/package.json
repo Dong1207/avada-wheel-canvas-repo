@@ -26,13 +26,13 @@
     "index.js"
   ],
   "keywords": [
-    "大转盘抽奖",
-    "九宫格抽奖",
-    "老虎机抽奖",
-    "抽奖插件",
-    "js抽奖",
-    "移动端抽奖",
-    "canvas抽奖"
+    "lucky wheel",
+    "lucky grid",
+    "slot machine",
+    "lottery plugin",
+    "js lottery",
+    "mobile lottery",
+    "canvas lottery"
   ],
   "devDependencies": {
     "@babel/core": "^7.12.3",

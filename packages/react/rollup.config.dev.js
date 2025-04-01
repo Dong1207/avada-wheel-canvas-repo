@@ -36,7 +36,7 @@ export default {
       open: true,
       port: 8000,
       contentBase: './',
-      openPage: '/example/react16.8.html',
+      openPage: '/example/react18.0.html',
     }),
   ],
   external: ['react'],
