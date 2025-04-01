@@ -1,5 +1,5 @@
-import LuckyWheel from "./demo/LuckyWheel";
-import LuckyGrid from "./demo/LuckyGrid";
-import SlotMachine from "./demo/SlotMachine";
+import LuckyWheel from "./components/LuckyWheel";
+import LuckyGrid from "./components/LuckyGrid";
+import SlotMachine from "./components/SlotMachine";
 
 export {LuckyWheel, LuckyGrid, SlotMachine};
