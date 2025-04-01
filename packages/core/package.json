@@ -12,15 +12,16 @@
     "preview": "vite preview",
     "clean": "rimraf dist types",
     "build:react": "npm run build && node scripts/copy-to-react.js",
-    "build:react:watch": "vite build --watch & node scripts/copy-to-react.js --watch"
+    "build:react:watch": "vite build --watch & node scripts/copy-to-react.js --watch",
+    "prepublishOnly": "npm run build"
   },
-  "homepage": "https://github.com/yourusername/avada-wheel-canvas",
-  "bugs": "https://github.com/yourusername/avada-wheel-canvas/issues",
+  "homepage": "https://github.com/Dong1207/avada-wheel-canvas-repo",
+  "bugs": "https://github.com/Dong1207/avada-wheel-canvas-repo/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/avada-wheel-canvas.git"
+    "url": "git+https://github.com/Dong1207/avada-wheel-canvas-repo.git"
   },
-  "author": "Your Name",
+  "author": "Dong",
   "license": "MIT",
   "files": [
     "dist",
