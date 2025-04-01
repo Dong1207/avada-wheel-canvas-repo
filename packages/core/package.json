@@ -1,7 +1,7 @@
 {
   "name": "lucky-canvas",
   "version": "1.7.26",
-  "description": "一个基于原生 js 的（大转盘 / 九宫格 / 老虎机）抽奖插件",
+  "description": "A native JS lottery plugin (Lucky Wheel / Lucky Grid / Slot Machine)",
   "type": "module",
   "main": "dist/index.esm.js",
   "module": "dist/index.esm.js",
