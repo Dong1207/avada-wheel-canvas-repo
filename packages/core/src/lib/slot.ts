@@ -290,7 +290,11 @@ export default class SlotMachine extends Lucky {
       maxOffHeight = Math.max(maxOffHeight, h + heightAndSpacing * currLen)
     })
     // 创建一个离屏Canvas来存储画布的内容
-    const { _offscreenCanvas, _ctx } = this.getOffscreenCanvas(maxOffWidth, maxOffHeight)!
+    const offscreenCanvas = this.getOffscreenCanvas(maxOffWidth, maxOffHeight)
+    if (!offscreenCanvas) {
+      throw new Error('Failed to create offscreen canvas')
+    }
+    const { _offscreenCanvas, _ctx } = offscreenCanvas
     this._offscreenCanvas = _offscreenCanvas
     // 绘制插槽
     this.slots.forEach((slot, slotIndex) => {

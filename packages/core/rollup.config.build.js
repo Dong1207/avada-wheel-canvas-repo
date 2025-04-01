@@ -1,5 +1,5 @@
 import path from 'path'
-import ts from 'rollup-plugin-typescript2'
+import typescript from '@rollup/plugin-typescript'
 import dts from 'rollup-plugin-dts'
 import json from '@rollup/plugin-json'
 import resolve from '@rollup/plugin-node-resolve'
@@ -27,38 +27,43 @@ export default [
         file: pkg.jsdelivr,
         format: 'umd',
         name: 'LuckyCanvas',
-        sourcemap: false,
-      },
-    ],
-    plugins: [
-      ts({
-        tsconfig: path.resolve(__dirname, './tsconfig.json'),
-        extensions: ['.js', '.ts'],
-        "declaration": true,
-      }),
-      json(),
-      resolve(),
-      commonjs(),
-      babel({
-        runtimeHelpers: true,
-        exclude: 'node_modules/**',
-      }),
-      terser()
-    ]
-  }, {
-    input: "dist/src/index.d.ts",
-    output: [
-      {
-        file: "types/index.d.ts",
-        format: "es"
+        sourcemap: true,
+        globals: {
+          'lucky-canvas': 'LuckyCanvas',
+        }
       }
     ],
     plugins: [
-      dts(),
-      del({
-        targets: ['dist/src'],
-        hook: 'buildEnd'
-      })
-    ],
+      del({ targets: ['dist/*', 'types/*'] }),
+      typescript({
+        tsconfig: './tsconfig.json',
+        declaration: false,
+        sourceMap: true,
+        inlineSources: true,
+      }),
+      babel({
+        exclude: 'node_modules/**',
+        extensions: ['.js', '.ts'],
+        presets: [
+          ['@babel/preset-env', {
+            targets: {
+              browsers: ['> 1%', 'last 2 versions', 'not ie <= 8']
+            }
+          }],
+          '@babel/preset-typescript'
+        ]
+      }),
+      resolve({
+        browser: true
+      }),
+      commonjs(),
+      json(),
+      terser()
+    ]
   },
+  {
+    input: 'src/index.ts',
+    output: [{ file: 'types/index.d.ts', format: 'es' }],
+    plugins: [dts()],
+  }
 ]

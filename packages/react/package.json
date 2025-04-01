@@ -45,6 +45,6 @@
     "rollup-plugin-terser": "^7.0.2"
   },
   "dependencies": {
-    "lucky-canvas": "^1.7.27"
+    "lucky-canvas": "file:../core"
   }
 }

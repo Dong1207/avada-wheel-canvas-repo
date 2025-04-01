@@ -6,7 +6,7 @@ export default class Wheel extends React.Component {
     super();
     this.myLucky = React.createRef();
     this.state = {
-      currPrize: "哈哈哈",
+      currPrize: "Current Prize",
       blocks: [],
       prizes: [
         {
@@ -20,9 +20,9 @@ export default class Wheel extends React.Component {
           fonts: [{text: "35% off", top: "30%", fontSize: "14px"}],
         },
         {
-          name: "Chúc may mắn",
+          name: "Good Luck",
           background: "#CC6666",
-          fonts: [{text: "Chúc may mắn", top: "30%", fontSize: "14px"}],
+          fonts: [{text: "Good Luck", top: "30%", fontSize: "14px"}],
         },
         {
           name: "IPhone 16 Pro max",
@@ -54,7 +54,7 @@ export default class Wheel extends React.Component {
         {
           radius: "35px",
           background: "#ffdea0",
-          fonts: [{text: "开始\n抽奖", fontSize: "18px", top: -18}],
+          fonts: [{text: "Start\nDraw", fontSize: "18px", top: -18}],
         },
       ],
     };
@@ -62,7 +62,7 @@ export default class Wheel extends React.Component {
   render() {
     return (
       <div>
-        当前中奖: {this.state.currPrize}
+        Current Prize: {this.state.currPrize}
         <LuckyWheel
           ref={this.myLucky}
           width="300px"

@@ -7,14 +7,14 @@ export default class GridDemo extends React.Component {
     this.myLucky = React.createRef()
 
     const data = [
-        { name: '1元红包', img: 'https://unpkg.com/buuing@0.0.1/imgs/lucky-canvas.png' },
-        { name: '100元红包', img: 'https://unpkg.com/buuing@0.0.1/imgs/lucky-canvas.png' },
-        { name: '0.5元红包', img: 'https://unpkg.com/buuing@0.0.1/imgs/lucky-canvas.png' },
-        { name: '2元红包', img: 'https://unpkg.com/buuing@0.0.1/imgs/lucky-canvas.png' },
-        { name: '10元红包', img: 'https://unpkg.com/buuing@0.0.1/imgs/lucky-canvas.png' },
-        { name: '50元红包', img: 'https://unpkg.com/buuing@0.0.1/imgs/lucky-canvas.png' },
-        { name: '0.3元红包', img: 'https://unpkg.com/buuing@0.0.1/imgs/lucky-canvas.png' },
-        { name: '5元红包', img: 'https://unpkg.com/buuing@0.0.1/imgs/lucky-canvas.png' }
+        { name: '$1 Red Packet', img: 'https://unpkg.com/buuing@0.0.1/imgs/lucky-canvas.png' },
+        { name: '$100 Red Packet', img: 'https://unpkg.com/buuing@0.0.1/imgs/lucky-canvas.png' },
+        { name: '$0.5 Red Packet', img: 'https://unpkg.com/buuing@0.0.1/imgs/lucky-canvas.png' },
+        { name: '$2 Red Packet', img: 'https://unpkg.com/buuing@0.0.1/imgs/lucky-canvas.png' },
+        { name: '$10 Red Packet', img: 'https://unpkg.com/buuing@0.0.1/imgs/lucky-canvas.png' },
+        { name: '$50 Red Packet', img: 'https://unpkg.com/buuing@0.0.1/imgs/lucky-canvas.png' },
+        { name: '$0.3 Red Packet', img: 'https://unpkg.com/buuing@0.0.1/imgs/lucky-canvas.png' },
+        { name: '$5 Red Packet', img: 'https://unpkg.com/buuing@0.0.1/imgs/lucky-canvas.png' }
       ]
       let axis = [[0, 0], [1, 0], [2, 0], [2, 1], [2, 2], [1, 2], [0, 2], [0, 1]]
       const prizes = []
@@ -43,12 +43,9 @@ export default class GridDemo extends React.Component {
         background: 'linear-gradient(270deg, #FFDCB8, #FDC689)',
         shadow: '0 5 1 #e89b4f',
         fonts: [
-            { text: `1 次`, fontColor: '#fff', top: '73%', fontSize: '11px' },
+            { text: `1 Time`, fontColor: '#fff', top: '73%', fontSize: '11px' },
         ],
-        imgs: [
-            // { src: 'https://100px.net/assets/img/button.2f4ac3e9.png', width: '65%', top: '12%' },
-            // { src: './img/btn.png', width: '50%', top: '73%' }
-        ]
+        imgs: []
         }
       ],
       defaultStyle: {
@@ -78,7 +75,7 @@ export default class GridDemo extends React.Component {
         }, 2500)
       }}
       onEnd={prize => { 
-        alert('恭喜获得大奖:' + prize.name)
+        alert('Congratulations! You won: ' + prize.name)
       }}
     ></LuckyGrid>
   }
