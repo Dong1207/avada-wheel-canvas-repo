@@ -10,7 +10,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "clean": "rimraf dist types"
+    "clean": "rimraf dist types",
+    "build:react": "npm run build && node scripts/copy-to-react.js",
+    "build:react:watch": "vite build --watch & node scripts/copy-to-react.js --watch"
   },
   "homepage": "https://github.com/yourusername/avada-wheel-canvas",
   "bugs": "https://github.com/yourusername/avada-wheel-canvas/issues",

@@ -8,14 +8,20 @@ export default defineConfig({
     react(),
     dts({
       insertTypesEntry: true,
-      include: ['src/**/*.jsx']
-    })
+      include: ["src/**/*.jsx"],
+    }),
   ],
+  resolve: {
+    alias: {
+      // Alias để import từ thư mục lib
+      "@lib": resolve(__dirname, "src/lib"),
+    },
+  },
   build: {
     lib: {
       entry: resolve(__dirname, "src/index.jsx"),
       name: "AvadaWheelCanvasReact",
-      formats: ['es', 'umd'],
+      formats: ["es", "umd"],
       fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {

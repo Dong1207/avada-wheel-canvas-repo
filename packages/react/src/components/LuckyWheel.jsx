@@ -1,5 +1,5 @@
 import React from 'react'
-import { LuckyWheel as Wheel } from 'lucky-canvas'
+import { LuckyWheel as Wheel } from '@lib/avada-wheel-canvas/index.esm.js'
 import { name, version } from '../../package.json'
 
 export default class LuckyWheel extends React.Component {
@@ -9,7 +9,7 @@ export default class LuckyWheel extends React.Component {
     this.lucky = undefined
   }
   componentDidMount () {
-    // 当前已经有实例时，不再进行，解决在`react18 + strictMode`下组件componentDidMount会被触发两次的问题
+    // Skip if instance already exists, fix issue where componentDidMount is triggered twice in `react18 + strictMode`
     if (this.lucky) {
       return
     }
