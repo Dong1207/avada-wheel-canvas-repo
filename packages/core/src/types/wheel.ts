@@ -66,6 +66,7 @@ export type DefaultStyleType = {
   wordWrap?: PrizeFontType['wordWrap']
   lengthLimit?: PrizeFontType['lengthLimit']
   lineClamp?: PrizeFontType['lineClamp']
+  textDirection?: PrizeFontType['textDirection']
 }
 
 export type StartCallbackType = (e: MouseEvent) => void

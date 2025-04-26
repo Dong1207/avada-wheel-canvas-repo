@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prize Wheel Spinner</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+        }
+        .container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+        }
+        .wheel {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            border-radius: 50%;
+            border: 10px solid #333;
+            transition: transform 5s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+        }
+        .wheel-center {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: white;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            border: 5px solid #333;
+        }
+        .marker {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 30px solid #333;
+            transform: translateX(-50%);
+            z-index: 5;
+        }
+        button {
+            margin-top: 30px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #FF5757;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #E53935;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            min-height: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="marker"></div>
+        <canvas id="wheel" class="wheel" width="400" height="400"></canvas>
+        <div class="wheel-center"></div>
+    </div>
+    <button id="spin-btn">SPIN</button>
+    <div id="result" class="result"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('wheel');
+            const ctx = canvas.getContext('2d');
+            const spinBtn = document.getElementById('spin-btn');
+            const resultDisplay = document.getElementById('result');
+            
+            // Wheel segments and prizes
+            const segments = 8;
+            const prizes = [
+                { text: 'Free gift', color: '#FF7777' },
+                { text: '35% off', color: '#FF9999' },
+                { text: 'Chúc may mắn', color: '#D35F5F' },
+                { text: 'Free shipping', color: '#FFCBCB' },
+                { text: '-$100', color: '#FF8888' },
+                { text: '35% off', color: '#FFACAC' },
+                { text: 'Thank you', color: '#C15050', rotated: true },
+                { text: '-$100', color: '#FFD9D9' }
+            ];
+            
+            let isSpinning = false;
+            let currentRotation = 0;
+            
+            // Draw the wheel
+            function drawWheel() {
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                const radius = canvas.width / 2;
+                
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw segments
+                const arc = Math.PI * 2 / segments;
+                for (let i = 0; i < segments; i++) {
+                    const angle = i * arc;
+                    ctx.beginPath();
+                    ctx.moveTo(centerX, centerY);
+                    ctx.arc(centerX, centerY, radius, angle, angle + arc);
+                    ctx.closePath();
+                    ctx.fillStyle = prizes[i].color;
+                    ctx.fill();
+                    ctx.strokeStyle = '#fff';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                    
+                    // Draw segment text
+                    ctx.save();
+                    ctx.translate(centerX, centerY);
+                    ctx.rotate(angle + arc / 2);
+                    
+                    ctx.textAlign = 'right';
+                    ctx.fillStyle = '#000';
+                    ctx.font = 'bold 16px Arial';
+                    
+                    if (prizes[i].rotated) {
+                        ctx.rotate(Math.PI);
+                        ctx.textAlign = 'left';
+                        ctx.fillText(prizes[i].text, -radius + 60, 5);
+                    } else {
+                        ctx.fillText(prizes[i].text, radius - 30, 5);
+                    }
+                    
+                    ctx.restore();
+                }
+                
+                // Draw center circle
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, 10, 0, Math.PI * 2);
+                ctx.fillStyle = '#333';
+                ctx.fill();
+            }
+            
+            // Spin the wheel
+            function spinWheel() {
+                if (isSpinning) return;
+                isSpinning = true;
+                resultDisplay.textContent = '';
+                
+                // Random rotation between 5 and 10 full spins
+                const spins = 5 + Math.random() * 5;
+                const targetRotation = currentRotation + (spins * 360);
+                
+                const wheel = document.getElementById('wheel');
+                wheel.style.transform = `rotate(${targetRotation}deg)`;
+                
+                // Reset button after spin completes
+                setTimeout(() => {
+                    isSpinning = false;
+                    currentRotation = targetRotation % 360;
+                    
+                    // Calculate which prize was won
+                    const arc = 360 / segments;
+                    // The modulo operation ensures we're within 0-360 degrees
+                    // We add an offset to account for the marker position
+                    const normalizedRotation = (360 - (currentRotation % 360) + 22.5) % 360;
+                    const winningSegment = Math.floor(normalizedRotation / arc);
+                    
+                    resultDisplay.textContent = `You won: ${prizes[winningSegment].text}!`;
+                }, 5000);
+            }
+            
+            // Initialize
+            drawWheel();
+            spinBtn.addEventListener('click', spinWheel);
+        });
+    </script>
+</body>
+</html>

@@ -147,6 +147,7 @@ export default class LuckyWheel extends Lucky {
         background: "rgba(0,0,0,0)",
         wordWrap: true,
         lengthLimit: "90%",
+        textDirection: "tangential",
         ...this.defaultStyle,
       };
       return style;
@@ -427,6 +428,8 @@ export default class LuckyWheel extends Lucky {
           const fontSize = this.getLength(
             font.fontSize || _defaultStyle.fontSize
           );
+          const textDirection =
+            font.textDirection || _defaultStyle.textDirection;
           const fontStyle = font.fontStyle || _defaultStyle.fontStyle;
           const wordWrap = has(font, "wordWrap")
             ? font.wordWrap
