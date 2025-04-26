@@ -9,10 +9,10 @@ export type PrizeFontType = FontItemType & {
   text: string | number
   top?: string | number
   left?: string | number
-  rotate?: number
   wordWrap?: boolean
   lengthLimit?: string | number
   lineClamp?: number
+  textDirection?: 'tangential' | 'radial'
 }
 
 export type ButtonFontType = FontItemType & {}
