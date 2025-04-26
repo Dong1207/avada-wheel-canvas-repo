@@ -147,9 +147,11 @@ export const computeRange = (rangeArr: Array<number | undefined>): number => {
 }
 
 /**
- * Split string by width to achieve line break effect
+ * Split string by width to achieve line break effect (word wrap)
+ * @param ctx 
  * @param text 
- * @param maxWidth 
+ * @param getWidth 
+ * @param lineClamp 
  * @returns 
  */
 export const splitText = (
@@ -158,31 +160,32 @@ export const splitText = (
   getWidth: (lines: string[]) => number,
   lineClamp: number = Infinity
 ): string[] => {
-  // If lineClamp is set incorrectly, ignore the property
   if (lineClamp <= 0) lineClamp = Infinity
-  let str = ''
-  const lines = []
+  const words = text.split(' ')
+  let lines: string[] = []
+  let currentLine = ''
   const EndWidth = ctx.measureText('...').width
-  for (let i = 0; i < text.length; i++) {
-    str += text[i]
-    let currWidth = ctx.measureText(str).width
+  for (let i = 0; i < words.length; i++) {
+    let word = words[i]
+    let testLine = currentLine ? currentLine + ' ' + word : word
+    let currWidth = ctx.measureText(testLine).width
     const maxWidth = getWidth(lines)
     // If calculating last line, add width of three dots
     if (lineClamp === lines.length + 1) currWidth += EndWidth
-    // If no width left, no need to calculate further
     if (maxWidth < 0) return lines
-    // If current line width is not enough, process next line
-    if (currWidth > maxWidth) {
-      lines.push(str.slice(0, -1))
-      str = text[i]
-    }
-    // If this is the last line, add three dots and break
-    if (lineClamp === lines.length) {
-      lines[lines.length - 1] += '...'
-      return lines
+    if (currWidth > maxWidth && currentLine) {
+      lines.push(currentLine)
+      currentLine = word
+      // Nếu đã đủ số dòng thì thêm ... và return
+      if (lines.length === lineClamp) {
+        lines[lines.length - 1] += '...'
+        return lines
+      }
+    } else {
+      currentLine = testLine
     }
   }
-  if (str) lines.push(str)
+  if (currentLine) lines.push(currentLine)
   if (!lines.length) lines.push(text)
   return lines
 }

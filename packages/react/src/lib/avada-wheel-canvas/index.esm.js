@@ -80,17 +80,20 @@ const P = (a, ...t) => t.some((e) => Object.prototype.toString.call(a).slice(8, 
   return t.findIndex((s) => i <= s);
 }, J = (a, t, e, i = 1 / 0) => {
   i <= 0 && (i = 1 / 0);
-  let s = "";
-  const h = [], r = a.measureText("...").width;
-  for (let n = 0; n < t.length; n++) {
-    s += t[n];
-    let o = a.measureText(s).width;
-    const l = e(h);
-    if (i === h.length + 1 && (o += r), l < 0) return h;
-    if (o > l && (h.push(s.slice(0, -1)), s = t[n]), i === h.length)
-      return h[h.length - 1] += "...", h;
+  const s = t.split(" ");
+  let h = [], r = "";
+  const n = a.measureText("...").width;
+  for (let o = 0; o < s.length; o++) {
+    let l = s[o], c = r ? r + " " + l : l, d = a.measureText(c).width;
+    const g = e(h);
+    if (i === h.length + 1 && (d += n), g < 0) return h;
+    if (d > g && r) {
+      if (h.push(r), r = l, h.length === i)
+        return h[h.length - 1] += "...", h;
+    } else
+      r = c;
   }
-  return s && h.push(s), h.length || h.push(t), h;
+  return r && h.push(r), h.length || h.push(t), h;
 }, gt = (a, t) => {
   const e = {}, i = [];
   for (let s = 0; s < a.length; s++)
