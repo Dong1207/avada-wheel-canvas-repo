@@ -1,94 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lucky Wheel Example</title>
-  <style>
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-      background: #f5f5f5;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    }
-    .container {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    .buttons {
-      margin-top: 20px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    button {
-      padding: 8px 16px;
-      border: none;
-      border-radius: 4px;
-      background: #617df2;
-      color: white;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    button:hover {
-      background: #4a6be7;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div id="my-lucky"></div>
-    <div class="buttons">
-      <button onclick="myLucky.play()">Play</button>
-      <button onclick="myLucky.stop(0)">Stop (0)</button>
-      <button onclick="myLucky.stop(1)">Stop (1)</button>
-      <button onclick="myLucky.stop(-1)">Stop (-1)</button>
-      <button onclick="myLucky.init()">Reset</button>
-    </div>
-  </div>
-  <script type="module">
-    import { LuckyWheel } from '../src/index.ts'
-    
-    window.myLucky = new LuckyWheel('#my-lucky', {
-      width: '300px',
-      height: '300px',
-      blocks: [
-        { padding: '10px', background: '#617df2' }
-      ],
-      prizes: [
-        { background: '#e9e8fe', fonts: [{ text: 'Prize 1', top: '0%',left: '30%', rotate: 90 ,fontSize: '12px'}] },
-        { background: '#b8c5f2', fonts: [{ text: 'Prize 2', top: '20%', rotate: 0 }] },
-        { background: '#e9e8fe', fonts: [{ text: 'Prize 3', top: '20%', rotate: 0 }] },
-        { background: '#b8c5f2', fonts: [{ text: 'Prize 4', top: '20%', rotate: 0 }] },
-        { background: '#e9e8fe', fonts: [{ text: 'Prize 5', top: '20%', rotate: 0 }] },
-        { background: '#b8c5f2', fonts: [{ text: 'Prize 6', top: '20%', rotate: 0 }] },
-      ],
-      buttons: [{
-        radius: '35%',
-        background: '#8a9bf3',
-        pointer: true,
-        fonts: [{ text: 'START', top: '-10px' }]
-      }],
-      defaultStyle: {
-        background: '#fff'
-      },
-      defaultConfig: {
-        gutter: 1
-      },
-      start () {
-        myLucky.play()
-        setTimeout(() => {
-          myLucky.stop(0)
-        }, 3000)
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lucky Wheel Example</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: 0;
+        background: #f5f5f5;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
       }
-    })
-  </script>
-</body>
+      .container {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .buttons {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      button {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        background: #617df2;
+        color: white;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      button:hover {
+        background: #4a6be7;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div id="my-lucky"></div>
+      <div class="buttons">
+        <button onclick="myLucky.play()">Play</button>
+        <button onclick="myLucky.stop(0)">Stop (0)</button>
+        <button onclick="myLucky.stop(1)">Stop (1)</button>
+        <button onclick="myLucky.stop(-1)">Stop (-1)</button>
+        <button onclick="myLucky.init()">Reset</button>
+      </div>
+    </div>
+    <script type="module">
+      import {LuckyWheel} from "../src/index.ts";
+
+      window.myLucky = new LuckyWheel("#my-lucky", {
+        width: "300px",
+        height: "300px",
+        blocks: [{padding: "10px", background: "#617df2"}],
+        prizes: [
+          {
+            name: "Coupon giảm $100",
+            data: {
+              id: "adb81f11-4000-4e0e-b414-6c5b8c84a64c",
+              title: "Coupon giảm $100",
+              description: "",
+              popupTitle: "Chúc mừng! Bạn đã trúng 1 coupon giảm 35%.",
+              popupDescription:
+                "Giảm 35% cho các đơn hàng trong bộ sưu tập Hè 2025.",
+              prizeOutcome: "good_luck",
+              prizeProbability: 10,
+            },
+            background: "#CC6666",
+            fonts: [
+              {
+                text: "Coupon giảm $100",
+                top: "10px",
+                fontColor: "#fff",
+                fontSize: "14px",
+                rotate: 40,
+              },
+            ],
+            imgs: [],
+          },
+          {
+            name: "Coupon miễn phí giao hàng",
+            data: {
+              id: "c72384d8-7b59-4263-9c39-d78cf30789b2",
+              title: "Coupon miễn phí giao hàng",
+              description: "",
+              popupTitle:
+                "Chúc mừng! Bạn đã trúng 1 coupon miễn phí giao hàng.",
+              popupDescription:
+                "Áp dụng cho đơn hàng từ $500 trở lên. Sử dụng ngay để tiết kiệm chi phí vận chuyển!",
+              prizeOutcome: "good_luck",
+              prizeProbability: 10,
+            },
+            background: "#D98C8C",
+            fonts: [
+              {
+                text: "Coupon miễn phí giao hàng",
+                top: "20px",
+                fontColor: "#fff",
+                fontSize: "14px",
+                rotate: 0,
+              },
+            ],
+            imgs: [],
+          },
+          {
+            name: "Coupon quà tặng miễn phí",
+            data: {
+              id: "9e7394e6-99c3-4d26-b6b4-3594ac09db9c",
+              title: "Coupon quà tặng miễn phí",
+              description: "",
+              popupTitle: "Chúc mừng! Bạn đã trúng 1 coupon quà tặng miễn phí.",
+              popupDescription:
+                "Áp dụng cho đơn hàng từ $200. Đừng quên sử dụng ngay để nhận quà đặc biệt dành cho bạn!",
+              prizeOutcome: "good_luck",
+              prizeProbability: 10,
+            },
+            background: "#E6B3B3",
+            fonts: [
+              {
+                text: "Coupon quà tặng miễn phí",
+                top: "20px",
+                fontColor: "#000",
+                fontSize: "14px",
+                rotate: 0,
+              },
+            ],
+            imgs: [],
+          },
+          {
+            name: "Chúc may mắn!",
+            data: {
+              id: "3787918a-1aa9-4214-833e-4b398d313e26",
+              title: "Chúc may mắn!",
+              description: "",
+              popupTitle: "Chúc may mắn! Tiếc quá, bạn chưa trúng lần này.",
+              popupDescription: "Đừng bỏ cuộc, hãy thử lại vào lần sau nhé!",
+              prizeOutcome: "good_luck",
+              prizeProbability: 10,
+            },
+            background: "#CC6666",
+            fonts: [
+              {
+                text: "Chúc may mắn!",
+                top: "20px",
+                fontColor: "#fff",
+                fontSize: "14px",
+                rotate: 0,
+              },
+            ],
+            imgs: [],
+          },
+          {
+            name: "Coupon giảm 10%",
+            data: {
+              id: "a99d0a2e-1c86-4b0b-a5e2-71818476efd4",
+              title: "Coupon giảm 10%",
+              description: "",
+              popupTitle: "Chúc mừng! Bạn đã trúng 1 coupon giảm $100.",
+              popupDescription:
+                "Mua 1 sản phẩm trong bộ sưu tập Hè 2025. Giảm $100 cho sản phẩm thứ 2.",
+              prizeOutcome: "good_luck",
+              prizeProbability: 10,
+            },
+            background: "#D98C8C",
+            fonts: [
+              {
+                text: "Coupon giảm 10%",
+                top: "20px",
+                fontColor: "#fff",
+                fontSize: "14px",
+                rotate: 0,
+              },
+            ],
+            imgs: [],
+          },
+        ],
+        buttons: [
+          {
+            radius: "35%",
+            background: "#8a9bf3",
+            pointer: true,
+            fonts: [{text: "START", top: "-10px"}],
+          },
+        ],
+        defaultStyle: {
+          background: "#fff",
+        },
+        defaultConfig: {
+          gutter: 1,
+        },
+        start() {
+          myLucky.play();
+          setTimeout(() => {
+            myLucky.stop(0);
+          }, 3000);
+        },
+      });
+    </script>
+  </body>
 </html>
